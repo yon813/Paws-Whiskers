@@ -1,247 +1,671 @@
-/*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
 
-/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
-/*
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
+:root {
+  --plum: #773344;
+  --blush: #E3B5A4;
+  --shell: #F5E9E2;
+  --glass: rgba(245,233,226,.62);
+  --line: rgba(255,255,255,.7);
+  --shadow: 0 10px 30px rgba(119,51,68,.12);
 
-/* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Inter', system-ui, sans-serif;
+
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
 
 html {
-  color: #222;
-  font-size: 1em;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  background: var(--shell);
+  color: var(--plum);
+  font: 15px/1.65 var(--sans);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(600px 400px at 8% 10%, rgba(227,181,164,.55), transparent 70%),
+    radial-gradient(700px 500px at 95% 40%, rgba(227,181,164,.4), transparent 70%),
+    radial-gradient(500px 400px at 20% 90%, rgba(119,51,68,.1), transparent 70%);
+  background-attachment: fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+}
+
+h1 { font-size: clamp(2.4rem,5.5vw,4rem); }
+h2 { font-size: clamp(1.8rem,3.5vw,2.5rem); }
+h3 { font-size: 1.25rem; }
+
+p { margin: 0 0 1em; }
+
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+section { padding: 56px 0; }
+
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+
+nav {
+  position: sticky;
+  top: env(safe-area-inset-top,0px);
+  z-index: 20;
+  margin: 12px auto 0;
+  max-width: 1160px;
+  width: calc(100% - 24px);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 20px;
+  border-radius: 999px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top,0px);
+  z-index: 10;
+  background: var(--shell);
+}
+
+.logo {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  margin-right: auto;
+}
+
+.links {
+  display: flex;
+  gap: 22px;
+  font-weight: 500;
+}
+
+.links a {
+  padding: 4px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: .2s;
+}
+
+.links a:hover, .links a.on {
+  border-color: var(--plum);
+}
+
+.ib {
+  background: none;
+  border: 0;
+  color: var(--plum);
+  cursor: pointer;
+  position: relative;
+  padding: 6px;
+  display: grid;
+  place-items: center;
+}
+
+.ib svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  background: var(--plum);
+  color: var(--shell);
+  font-size: 11px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+}
+
+#burger { display: none; }
+
+#sbar {
+  display: none;
+  max-width: 1160px;
+  margin: 8px auto 0;
+  width: calc(100% - 24px);
+  padding: 10px 16px;
+}
+
+#sbar.open {
+  display: block;
+  position: sticky;
+  top: calc(64px + env(safe-area-inset-top,0px));
+  z-index: 19;
+}
+
+input, select, textarea {
+  font: inherit;
+  color: var(--plum);
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(119,51,68,.25);
+  border-radius: 14px;
+  padding: 11px 14px;
+  width: 100%;
+  outline: 0;
+  transition: .2s;
+}
+
+input:focus, select:focus, textarea:focus,
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--plum);
+  outline-offset: 2px;
+}
+
+input.bad, textarea.bad, select.bad {
+  border-color: var(--plum);
+  background: rgba(227,181,164,.45);
+}
+
+.err {
+  color: var(--plum);
+  font-size: 13px;
+  min-height: 18px;
+  font-weight: 500;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--plum);
+  color: var(--shell);
+  border: 1.5px solid var(--plum);
+  border-radius: 999px;
+  padding: 12px 26px;
+  font: 500 15px var(--sans);
+  cursor: pointer;
+  transition: .25s;
+}
+
+.btn:hover {
+  background: var(--blush);
+  color: var(--plum);
+  border-color: var(--blush);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--plum);
+}
+
+.btn.ghost:hover { background: var(--blush); }
+
+.btn.sm {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 36px;
+  align-items: center;
+  padding: 48px 0 24px;
+}
+
+.hero p {
+  max-width: 46ch;
+  font-size: 1.05rem;
+}
+
+.hero .art {
+  border-radius: 32px;
+  overflow: hidden;
+  aspect-ratio: 1/1;
+  max-height: 520px;
+  width: 100%;
+}
+
+.btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(230px,1fr));
+  gap: 20px;
+}
+
+.card {
+  overflow: hidden;
+  transition: .3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(119,51,68,.2);
+}
+
+.card svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ci { padding: 14px 16px 18px; }
+.ci small { opacity: .7; }
+.ci h3 { font-size: 1.1rem; margin: 2px 0 4px; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.rt { font-size: 13px; }
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+  gap: 18px;
+}
+
+.coll {
+  padding: 30px 24px;
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: .3s;
+}
+
+.coll:hover { background: rgba(227,181,164,.55); }
+
+.promo {
+  background: var(--blush);
+  border-radius: 28px;
+  padding: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.promo h2 { max-width: 20ch; }
+
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.two .art {
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.two svg { display: block; width: 100%; }
+
+.quote { padding: 26px; }
+
+.quote p {
+  font-family: var(--serif);
+  font-size: 1.25rem;
   line-height: 1.4;
 }
 
-/*
- * Remove text-shadow in selection highlight:
- * https://twitter.com/miketaylr/status/12228805301
- *
- * Customize the background color to match your design.
- */
-
-::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
+.sh {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 24px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
+footer {
+  margin-top: 40px;
+  padding: 40px 0 30px;
+  background: var(--plum);
+  color: var(--shell);
 }
 
-/*
- * A better looking default horizontal rule
- */
-
-hr {
+footer .cols a {
   display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
+  opacity: .85;
+  margin: 4px 0;
 }
 
-/*
- * Remove the gap between audio, canvas, iframes,
- * images, videos and the bottom of their containers:
- * https://github.com/h5bp/html5-boilerplate/issues/440
- */
-
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
-  vertical-align: middle;
+footer a:hover {
+  opacity: 1;
+  text-decoration: underline;
 }
 
-/*
- * Remove default fieldset styles.
- */
+footer h3 { margin-bottom: 8px; }
 
-fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
+.soc {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-/*
- * Allow only vertical resizing of textareas.
- */
-
-textarea {
-  resize: vertical;
+.soc a {
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(245,233,226,.5);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
 }
 
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-
-/* ==========================================================================
-   Helper classes
-   ========================================================================== */
-
-/*
- * Hide visually and from screen readers
- */
-
-.hidden,
-[hidden] {
-  display: none !important;
+.soc svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--shell);
+  fill: none;
+  stroke-width: 1.6;
 }
 
-/*
- * Hide only visually, but have it available for screen readers:
- * https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
- *
- * 1. For long content, line feeds are not interpreted as spaces and small width
- *    causes content to wrap 1 word per line:
- *    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0;
+}
 
-.visually-hidden {
-  border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
+.chip {
+  border: 1px solid rgba(119,51,68,.3);
+  background: var(--glass);
+  color: var(--plum);
+  border-radius: 999px;
+  padding: 7px 15px;
+  font: 500 13px var(--sans);
+  cursor: pointer;
+  transition: .2s;
+}
+
+.chip:hover, .chip.on {
+  background: var(--plum);
+  color: var(--shell);
+}
+
+.tools {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 12px;
+}
+
+.pd {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding-top: 30px;
+}
+
+.main {
+  border-radius: 26px;
+  overflow: hidden;
+}
+
+.main svg {
+  display: block;
+  width: 100%;
+}
+
+.thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.thumbs button {
+  width: 80px;
+  border: 2px solid transparent;
+  border-radius: 14px;
   overflow: hidden;
   padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
-  /* 1 */
+  cursor: pointer;
+  background: none;
 }
 
-/*
- * Extends the .visually-hidden class to allow the element
- * to be focusable when navigated to via the keyboard:
- * https://www.drupal.org/node/897638
- */
+.thumbs button.on { border-color: var(--plum); }
+.thumbs svg { display: block; width: 100%; }
 
-.visually-hidden.focusable:active,
-.visually-hidden.focusable:focus {
-  clip: auto;
-  height: auto;
+.price {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 6px 0 12px;
+}
+
+.qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(119,51,68,.3);
+  border-radius: 999px;
+  background: rgba(255,255,255,.5);
+}
+
+.qty button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: none;
+  color: var(--plum);
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.qty span {
+  min-width: 28px;
+  text-align: center;
+}
+
+.spec {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+}
+
+.spec td {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(119,51,68,.15);
+}
+
+.spec td:first-child {
+  opacity: .7;
+  width: 40%;
+}
+
+.cartw {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 26px;
+  align-items: start;
+}
+
+.line {
+  display: grid;
+  grid-template-columns: 84px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.line svg {
+  width: 84px;
+  height: 84px;
+  border-radius: 14px;
+  display: block;
+}
+
+.sum {
+  padding: 26px;
+  position: sticky;
+  top: 90px;
+}
+
+.sum .row { margin: 10px 0; }
+
+.tot {
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-top: 1px solid rgba(119,51,68,.25);
+  padding-top: 12px;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 14px;
+}
+
+.form .f { grid-column: 1/-1; }
+
+label {
+  font-weight: 500;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.pay {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pay label {
+  flex: 1;
+  min-width: 160px;
+  padding: 14px;
+  border: 1px solid rgba(119,51,68,.3);
+  border-radius: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+  background: rgba(255,255,255,.4);
   margin: 0;
-  overflow: visible;
-  position: static;
-  white-space: inherit;
-  width: auto;
 }
 
-/*
- * Hide visually and from screen readers, but maintain layout
- */
+.pay input { width: auto; }
 
-.invisible {
-  visibility: hidden;
+details {
+  padding: 16px 20px;
+  margin-bottom: 10px;
 }
 
-/*
- * Clearfix: contain floats
- *
- * The use of `table` rather than `block` is only necessary if using
- * `::before` to contain the top-margins of child elements.
- */
-
-.clearfix::before,
-.clearfix::after {
-  content: "";
-  display: table;
+summary {
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.clearfix::after {
-  clear: both;
+details p { margin: 10px 0 0; }
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom,0px));
+  transform: translate(-50%,30px);
+  opacity: 0;
+  background: var(--plum);
+  color: var(--shell);
+  padding: 12px 22px;
+  border-radius: 999px;
+  transition: .3s;
+  z-index: 50;
+  pointer-events: none;
 }
 
-/* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   These examples override the primary ('mobile first') styles.
-   Modify as content requires.
-   ========================================================================== */
-
-@media only screen and (min-width: 35em) {
-  /* Style adjustments for viewports that meet the condition */
+#toast.on {
+  opacity: 1;
+  transform: translate(-50%,0);
 }
 
-@media print,
-  (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 1.25dppx),
-  (min-resolution: 120dpi) {
-  /* Style adjustments for high resolution devices */
+.center { text-align: center; }
+.mt { margin-top: 24px; }
+
+@media(max-width:860px) {
+  .links {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 22px;
+    background: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+  }
+
+  .links.open { display: flex; }
+  #burger { display: grid; }
+
+  .hero, .two, .pd, .cartw {
+    grid-template-columns: 1fr;
+  }
+
+  .sum { position: static; }
+  .form { grid-template-columns: 1fr; }
+  .tools { grid-template-columns: 1fr; }
+  .promo { padding: 28px; }
+
+  .line { grid-template-columns: 64px 1fr; }
+  .line svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  .line>:last-child { grid-column: 1/-1; }
 }
 
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid the additional HTTP request:
-   https://www.phpied.com/delay-loading-your-print-css/
-   ========================================================================== */
-
-@media print {
-  *,
-  *::before,
-  *::after {
-    background: #fff !important;
-    color: #000 !important;
-    /* Black prints faster */
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-
-  a,
-  a:visited {
-    text-decoration: underline;
-  }
-
-  a[href]::after {
-    content: " (" attr(href) ")";
-  }
-
-  abbr[title]::after {
-    content: " (" attr(title) ")";
-  }
-
-  /*
-   * Don't show links that are fragment identifiers,
-   * or use the `javascript:` pseudo protocol
-   */
-  a[href^="#"]::after,
-  a[href^="javascript:"]::after {
-    content: "";
-  }
-
-  pre {
-    white-space: pre-wrap !important;
-  }
-
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
-
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  h2,
-  h3 {
-    page-break-after: avoid;
+@media(prefers-reduced-motion:reduce) {
+  * {
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
-
