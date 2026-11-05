@@ -1081,10 +1081,6 @@ function checkout() {
    13. ORDER VALIDATION AND CONFIRMATION
 ========================================= */
 
-/* =========================================
-   13. ORDER VALIDATION AND CONFIRMATION
-========================================= */
-
 let last = null;
 
 async function place(e) {
@@ -1275,6 +1271,205 @@ function confirmed() {
 
         </div>
     `;
+}
+
+
+/* =========================================
+   MY ORDERS PAGE
+========================================= */
+
+function myOrders() {
+  return `
+    <div class="wrap" style="padding-top:36px">
+
+      <div class="sh">
+        <h1 style="font-size:2.6rem">My Orders</h1>
+
+        <a href="#shop" class="btn ghost sm">
+          Continue shopping
+        </a>
+      </div>
+
+      <p class="mt">
+        View your previous purchases and check their status.
+      </p>
+
+      <div id="ordersList" class="mt">
+        <div class="glass" style="padding:24px">
+          Loading your orders...
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+async function loadMyOrders() {
+  const container = $('ordersList');
+
+  if (!container) return;
+
+  const escapeHTML = value =>
+    String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[char]);
+
+  try {
+    const response = await fetch('api/my-orders.php');
+    const data = await response.json();
+
+    // Customer is not logged in
+    if (response.status === 401) {
+      container.innerHTML = `
+        <div class="glass center" style="padding:36px">
+          <h2>Please log in first</h2>
+
+          <p class="mt">
+            You need to log in to view your order history.
+          </p>
+
+          <button class="btn mt" type="button"
+            onclick="$('accountBtn').click()">
+            Log in
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || 'Unable to load orders.');
+    }
+
+    if (!data.orders.length) {
+      container.innerHTML = `
+        <div class="glass center" style="padding:36px">
+          <h2>No orders yet</h2>
+
+          <p class="mt">
+            Your purchases will appear here once you place an order.
+          </p>
+
+          <a href="#shop" class="btn mt">
+            Explore the shop
+          </a>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = data.orders.map(order => {
+      const date = new Date(
+        String(order.created_at).replace(' ', 'T')
+      );
+
+      const dateText = Number.isNaN(date.getTime())
+        ? escapeHTML(order.created_at)
+        : escapeHTML(date.toLocaleString('en-PH', {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        }));
+
+      const items = order.items.map(item => {
+        const p = prod(Number(item.product_id));
+
+        const productName = p
+          ? p.n
+          : 'Product #' + item.product_id;
+
+        const optionLabel = p ? p.ol : 'Option';
+
+        return `
+          <div class="row" style="padding:10px 0">
+            <div>
+              <b>${escapeHTML(productName)}</b>
+
+              <small style="display:block">
+                ${escapeHTML(optionLabel)}:
+                ${escapeHTML(item.option_value)}
+                · Qty: ${Number(item.quantity)}
+              </small>
+            </div>
+
+            <b>
+              ${fmt(Number(item.unit_price) * Number(item.quantity))}
+            </b>
+          </div>
+        `;
+      }).join('');
+
+      const status = String(order.status || 'pending');
+      const statusLabel = status.charAt(0).toUpperCase() +
+        status.slice(1);
+
+      return `
+        <article class="glass" style="padding:22px;margin-bottom:18px">
+
+          <div class="row" style="flex-wrap:wrap;gap:12px">
+            <div>
+              <small>Order number</small>
+              <h3>${escapeHTML(order.order_no)}</h3>
+            </div>
+
+            <span class="chip">
+              ${escapeHTML(statusLabel)}
+            </span>
+          </div>
+
+          <p class="mt">
+            <small>Placed on: ${dateText}</small>
+          </p>
+
+          <div style="margin-top:18px">
+            ${items}
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <span>Subtotal</span>
+            <span>${fmt(Number(order.subtotal))}</span>
+          </div>
+
+          <div class="row">
+            <span>Delivery</span>
+            <span>
+              ${Number(order.shipping) === 0
+        ? 'Free'
+        : fmt(Number(order.shipping))}
+            </span>
+          </div>
+
+          <div class="row tot">
+            <b>Total</b>
+            <b>${fmt(Number(order.total))}</b>
+          </div>
+
+          <p style="margin-top:12px">
+            <small>
+              Payment method:
+              ${escapeHTML(order.payment_method)}
+            </small>
+          </p>
+
+        </article>
+      `;
+    }).join('');
+
+  } catch (error) {
+    console.error('Order history error:', error);
+
+    container.innerHTML = `
+      <div class="glass center" style="padding:24px">
+        <p>Unable to load your orders.</p>
+        <button class="btn mt" onclick="loadMyOrders()">
+          Try again
+        </button>
+      </div>
+    `;
+  }
 }
 
 
@@ -1564,6 +1759,7 @@ function route() {
       cart: cartPg,
       checkout,
       confirmed,
+      'my-orders': myOrders,
       about,
       contact
     }[k] || home)();

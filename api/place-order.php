@@ -1,5 +1,9 @@
+
 <?php
+session_start();
+
 require 'database.php';
+
 header('Content-Type: application/json');
 
 function fail($code, $msg) {
@@ -12,6 +16,13 @@ function fail($code, $msg) {
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   fail(405, 'POST only');
 }
+
+// Require a logged-in customer
+if (!isset($_SESSION['user_id']) || (int) $_SESSION['user_id'] <= 0) {
+  fail(401, 'Please log in before placing an order.');
+}
+
+$userId = (int) $_SESSION['user_id'];
 
 // Receive checkout data
 $in = json_decode(file_get_contents('php://input'), true);
@@ -52,6 +63,16 @@ if (strlen($c['phone']) > 20) {
 }
 
 try {
+  // Make sure the logged-in account still exists
+  $checkUser = $pdo->prepare(
+    'SELECT id FROM users WHERE id = ?'
+  );
+  $checkUser->execute([$userId]);
+
+  if (!$checkUser->fetch()) {
+    fail(401, 'Your account could not be verified. Please log in again.');
+  }
+
   $pdo->beginTransaction();
 
   // Prepare product and option queries
@@ -69,6 +90,10 @@ try {
 
   // Validate products and calculate subtotal
   foreach ($items as $it) {
+    if (!is_array($it)) {
+      throw new InvalidArgumentException('Invalid order item');
+    }
+
     $q = $it['q'] ?? null;
 
     if (!is_int($q) || $q < 1 || $q > 20) {
@@ -109,15 +134,17 @@ try {
   // Generate order number
   $orderNo = 'MP-' . random_int(100000, 999999);
 
-  // Save customer order
+  // Save customer order with logged-in user ID
   $insertOrder = $pdo->prepare(
     'INSERT INTO orders
-        (order_no, customer_name, email, phone, address, city, zip,
-         payment_method, subtotal, shipping, total)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+            (user_id, order_no, customer_name, email, phone,
+             address, city, zip, payment_method, subtotal,
+             shipping, total)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
   );
 
   $insertOrder->execute([
+    $userId,
     $orderNo,
     $c['name'],
     $c['email'],
@@ -136,8 +163,8 @@ try {
   // Save purchased products
   $insertItem = $pdo->prepare(
     'INSERT INTO order_items
-        (order_id, product_id, option_value, quantity, unit_price)
-        VALUES (?, ?, ?, ?, ?)'
+            (order_id, product_id, option_value, quantity, unit_price)
+         VALUES (?, ?, ?, ?, ?)'
   );
 
   foreach ($lines as $line) {
