@@ -9,7 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
 
@@ -25,6 +26,11 @@
     <a href="#contact">Contact</a>
   </div>
 
+  <button class="ib" id="accountBtn"
+          aria-label="Open account" type="button">
+    <i class="ri-user-line"></i>
+  </button>
+
   <button class="ib" aria-label="Search" onclick="toggleSearch()">
     <i class="ri-search-line"></i>
   </button>
@@ -39,6 +45,84 @@
     <i class="ri-menu-line"></i>
   </button>
 </nav>
+
+<!-- ACCOUNT MODAL -->
+<div class="account-overlay" id="accountOverlay" hidden>
+
+  <div class="account-modal">
+
+    <button class="account-close" id="accountClose"
+            aria-label="Close">
+      <i class="ri-close-line"></i>
+    </button>
+
+    <div class="account-heading">
+      <i class="ri-footprint-line"></i>
+      <p>PAWS & WHISKERS</p>
+      <h2>Welcome to the family.</h2>
+      <span>Your pets deserve the very best.</span>
+    </div>
+
+    <div class="account-tabs">
+      <button class="active" id="loginTab">LOG IN</button>
+      <button id="signupTab">SIGN UP</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" class="account-form">
+
+      <label>Email Address</label>
+      <input type="email" name="email"
+             placeholder="Enter your email" required>
+
+      <label>Password</label>
+      <input type="password" name="password"
+             placeholder="Enter your password" required>
+
+      <button type="submit" class="account-submit">
+        Log In <i class="ri-arrow-right-line"></i>
+      </button>
+
+      <p>Don't have an account?
+        <a href="#" id="switchSignup">Sign Up</a>
+      </p>
+    </form>
+
+    <!-- SIGN UP FORM -->
+    <form id="signupForm" class="account-form" hidden>
+
+      <label>Full Name</label>
+      <input type="text" name="name"
+             placeholder="Enter your full name" required>
+
+      <label>Email Address</label>
+      <input type="email" name="email"
+             placeholder="Enter your email" required>
+
+      <label>Password</label>
+      <input type="password" name="password"
+             placeholder="Create a password"
+             minlength="8" required>
+
+      <label>Confirm Password</label>
+      <input type="password" name="confirm_password"
+             placeholder="Confirm your password"
+             minlength="8" required>
+
+      <button type="submit" class="account-submit">
+        Create Account
+        <i class="ri-arrow-right-line"></i>
+      </button>
+
+      <p>Already have an account?
+        <a href="#" id="switchLogin">Log In</a>
+      </p>
+    </form>
+
+    <p id="accountMessage" role="status"></p>
+
+  </div>
+</div>
 
 <div id="sbar" class="glass">
   <input id="sq" type="search"
@@ -126,5 +210,6 @@
 
 <script src="js/script.js"></script>
 <script src="js/drawer.js"></script>
+<script src="js/auth-modal.js"></script>
 </body>
 </html>

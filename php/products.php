@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require 'database.php';
 header('Content-Type: application/json');
 
 try {
