@@ -3,6 +3,7 @@
 ========================================= */
 
 const fmt = n => '₱' + n.toLocaleString('en-PH');
+
 const $ = id => document.getElementById(id);
 
 let P = [];
@@ -81,7 +82,7 @@ function stars(r) {
 
 
 /* =========================================
-   4. PRODUCT ILLUSTRATIONS / PHOTOS
+   4. PRODUCT ILLUSTRATIONS
 ========================================= */
 
 const IC = {
@@ -104,13 +105,14 @@ const IC = {
     '<path d="M100 150C50 116 50 72 80 66c10-2 18 4 20 12 2-8 10-14 20-12 30 6 30 50-20 84z"/><path d="M100 90v28M86 104h28"/>'
 };
 
-// PRODUCT IMAGE INTEGRATION
-function art(p) {
+function art(p, v = 0) {
   return `
-    <img class="product-photo"
-         src="img/product-${p.id}.jpg"
-         alt="${p.n}"
-         loading="lazy">
+    <img
+      src="img/product-${p.id}.jpg"
+      alt="${p.n}"
+      loading="lazy"
+      decoding="async"
+    >
   `;
 }
 
@@ -223,7 +225,11 @@ function add(id, q = 1, o) {
 
     l.q += q;
   } else {
-    cart.push({ id, o, q });
+    cart.push({
+      id,
+      o,
+      q
+    });
   }
 
   save();
@@ -308,40 +314,50 @@ function heroArt(v) {
 
   return `
     <svg viewBox="0 0 400 400"
-      style="display:block;width:100%;height:100%"
-      role="img"
-      aria-label="Illustration of a dog and a cat side by side">
+        style="display:block;width:100%;height:100%"
+        role="img"
+        aria-label="Illustration of a dog and a cat side by side">
 
       <rect width="400" height="400" fill="${b}"/>
-      <circle cx="300" cy="90" r="120" fill="${a}" opacity=".7"/>
-      <circle cx="60" cy="360" r="110" fill="#773344" opacity=".1"/>
 
-      <g stroke="#773344" stroke-width="5"
-         stroke-linejoin="round" stroke-linecap="round">
+      <circle cx="300" cy="90" r="120"
+          fill="${a}" opacity=".7"/>
 
-        <path d="M70 300V200a70 70 0 01140 0v100z" fill="${a}"/>
+      <circle cx="60" cy="360" r="110"
+          fill="#773344" opacity=".1"/>
+
+      <g stroke="#773344"
+          stroke-width="5"
+          stroke-linejoin="round"
+          stroke-linecap="round">
+
+        <path d="M70 300V200a70 70 0 01140 0v100z"
+            fill="${a}"/>
 
         <path d="M82 150c-34 0-40 70-18 86
-          16-22 20-50 18-86zM198 150c34 0 40 70
-          18 86-16-22-20-50-18-86z" fill="#773344"/>
+            16-22 20-50 18-86zM198 150c34 0 40 70
+            18 86-16-22-20-50-18-86z"
+            fill="#773344"/>
 
         <circle cx="118" cy="190" r="6" fill="#773344"/>
         <circle cx="162" cy="190" r="6" fill="#773344"/>
 
-        <path d="M128 220q12 10 24 0M140 206v10" fill="none"/>
+        <path d="M128 220q12 10 24 0M140 206v10"
+            fill="none"/>
 
         <path d="M215 300V230a60 60 0 01120 0v70z"
-          fill="#E3B5A4" opacity=".95"/>
+            fill="#E3B5A4" opacity=".95"/>
 
         <path d="M225 190l10-48 32 22M325 190l-10-48-32 22"
-          fill="#E3B5A4"/>
+            fill="#E3B5A4"/>
 
         <circle cx="250" cy="232" r="5" fill="#773344"/>
         <circle cx="296" cy="232" r="5" fill="#773344"/>
 
         <path d="M265 250q8 8 16 0M273 244v6
-          M230 248l-18-4M230 256l-18 6
-          M316 248l18-4M316 256l18 6" fill="none"/>
+            M230 248l-18-4M230 256l-18 6
+            M316 248l18-4M316 256l18 6"
+            fill="none"/>
 
       </g>
     </svg>
@@ -395,9 +411,12 @@ function home() {
     ['Accessories', 'Accessories', 'Leather, brass and linen'],
     ['Health & Wellness', 'Health & Wellness', 'Daily care, simplified']
   ].map(c => `
-            <a class="coll glass" href="#shop-${CATS.indexOf(c[0])}">
+            <a class="coll glass"
+                href="#shop-${CATS.indexOf(c[0])}">
+
               <h3>${c[1]}</h3>
               <span>${c[2]}</span>
+
             </a>
           `).join('')}
 
@@ -418,6 +437,90 @@ function home() {
 
       </div>
     </section>
+
+    <section>
+      <div class="wrap">
+
+        <div class="promo">
+
+          <div>
+            <h2>Free delivery on orders over ₱3,000</h2>
+
+            <p class="mt">
+              Plus a handwritten care note with your first order.
+            </p>
+          </div>
+
+          <a class="btn" href="#shop">Start shopping</a>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap two">
+
+        <div class="art glass">
+          ${heroArt(1)}
+        </div>
+
+        <div>
+          <h2>A quieter kind of pet store</h2>
+
+          <p class="mt">
+            We started Paws&Whiskers because the things
+            our pets use every day should be as considered
+            as the rest of our homes. We stock fewer products,
+            chosen for materials, craft and comfort.
+            Only dogs and cats, because we would rather know them well.
+          </p>
+
+          <a class="btn ghost" href="#about">Our story</a>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+
+        <div class="sh">
+          <h2>Kind words</h2>
+        </div>
+
+        <div class="cols">
+
+          ${[
+    [
+      'The orthopedic bed changed how our senior lab sleeps. It looks lovely in the living room, too.',
+      'Camille R.'
+    ],
+    [
+      'Our cat ignores every toy except the feather wand. It has lasted months.',
+      'Joaquin D.'
+    ],
+    [
+      'Delivery was fast and the packaging was beautiful. The leather collar is superb.',
+      'Ana L.'
+    ]
+  ].map(t => `
+            <div class="quote glass">
+              <p>“${t[0]}”</p>
+              <b>${t[1]}</b>
+              <div class="rt">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+              </div>
+            </div>
+          `).join('')}
+
+        </div>
+      </div>
+    </section>
   `;
 }
 
@@ -427,135 +530,265 @@ function home() {
 ========================================= */
 
 function shop() {
-  const list = P.filter(p => {
-    const matchesSearch =
-      !S.q ||
-      p.n.toLowerCase().includes(S.q.toLowerCase()) ||
-      p.d.toLowerCase().includes(S.q.toLowerCase());
-
-    const matchesCategory =
-      S.cat === 0 ||
-      p.c === CATS[S.cat];
-
-    return matchesSearch && matchesCategory;
-  });
-
-  if (S.sort === 'lo') {
-    list.sort((a, b) => a.p - b.p);
-  } else if (S.sort === 'hi') {
-    list.sort((a, b) => b.p - a.p);
-  } else if (S.sort === 'new') {
-    list.sort((a, b) => b.id - a.id);
-  } else {
-    list.sort((a, b) => Number(b.b) - Number(a.b));
-  }
+  const g = CATS.map((c, i) => `
+    <button class="chip ${S.cat == i ? 'on' : ''}"
+        onclick="S.cat=${i};route()">
+      ${c}
+    </button>
+  `).join('');
 
   return `
-    <div class="wrap">
+    <div class="wrap" style="padding-top:36px">
 
-      <div class="sh">
-        <h1>Shop</h1>
-        <span>${list.length} products</span>
-      </div>
+      <h1 style="font-size:clamp(2rem,4vw,3rem)">
+        ${S.cat ? CATS[S.cat] : 'The shop'}
+      </h1>
 
-      <div class="shop-tools">
+      <div class="chips">${g}</div>
 
-        <div class="filters">
-          ${CATS.map((c, i) => `
-            <button class="filter ${S.cat === i ? 'active' : ''}"
-              onclick="setCat(${i})">${c}</button>
-          `).join('')}
-        </div>
+      <div class="tools">
 
-        <select onchange="setSort(this.value)">
+        <input id="fq"
+            type="search"
+            placeholder="Search products..."
+            value="${S.q.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"
+            aria-label="Search products"
+            oninput="S.q=this.value;grid()">
+
+        <select aria-label="Sort"
+            onchange="S.sort=this.value;grid()">
+
           ${SORTS.map(s => `
-            <option value="${s[0]}" ${S.sort === s[0] ? 'selected' : ''}>
+            <option value="${s[0]}"
+                ${S.sort == s[0] ? 'selected' : ''}>
               ${s[1]}
             </option>
           `).join('')}
+
         </select>
 
       </div>
 
-      <div class="grid" id="product-grid">
-        ${list.map(card).join('')}
-      </div>
+      <p id="cnt2" class="mt" style="margin-bottom:12px"></p>
 
-      ${list.length === 0 ? '<p>No products found.</p>' : ''}
+      <div class="grid" id="pg"></div>
 
     </div>
   `;
 }
 
-function setCat(i) {
-  S.cat = i;
-  route();
-}
-
-function setSort(s) {
-  S.sort = s;
-  route();
-}
-
 function grid() {
-  const g = $('product-grid');
-  if (!g) return;
+  const l = P.filter(p => {
+    const c = CATS[S.cat];
+
+    const matchesCategory =
+      S.cat == 0 ||
+      (c == 'Dog Essentials' && p.pet != 'cat') ||
+      (c == 'Cat Essentials' && p.pet != 'dog') ||
+      p.g == c;
+
+    const searchText = (
+      p.n + ' ' +
+      p.g + ' ' +
+      p.d + ' ' +
+      p.pet + ' ' +
+      p.o.join(' ') + ' ' +
+      p.ol
+    ).toLowerCase();
+
+    const matchesSearch = searchText.includes(
+      S.q.toLowerCase()
+    );
+
+    return matchesCategory && matchesSearch;
+  });
+
+  const f = {
+    best: (a, b) => b.b - a.b || b.r - a.r,
+    new: (a, b) => a.w - b.w,
+    lo: (a, b) => a.p - b.p,
+    hi: (a, b) => b.p - a.p
+  }[S.sort];
+
+  l.sort(f);
+
+  $('cnt2').textContent =
+    l.length + ' product' + (l.length == 1 ? '' : 's');
+
+  $('pg').innerHTML = l.length
+    ? l.map(card).join('')
+    : `
+      <div class="glass"
+          style="padding:30px;grid-column:1/-1">
+        Nothing matches that search.
+        Try a different word or clear the filters.
+      </div>
+    `;
 }
 
 
 /* =========================================
-   10. PRODUCT DETAIL PAGE
+   10. PRODUCT DETAILS
 ========================================= */
+
+let sel = {};
 
 function product(id) {
   const p = prod(id);
 
-  if (!p) {
-    return `
-      <div class="wrap center">
-        <h1>Product not found</h1>
-        <a href="#shop" class="btn">Back to shop</a>
-      </div>
-    `;
-  }
+  if (!p) return shop();
+
+  sel = {
+    o: p.o[0],
+    q: 1,
+    v: 0
+  };
+
+  const rel = P.filter(x =>
+    x.id != id &&
+    (x.g == p.g || x.pet == p.pet)
+  ).slice(0, 4);
 
   return `
-    <div class="wrap product-detail">
+    <div class="wrap">
 
-      <div class="product-image glass">
-        ${art(p)}
+      <p class="mt">
+        <a href="#shop">
+          <i class="ri-arrow-left-line"></i> Back to shop
+        </a>
+      </p>
+
+      <div class="pd">
+
+        <div>
+
+          <div class="main glass" id="pmain">
+            ${art(p, 0)}
+          </div>
+
+          <div class="thumbs" id="pth">
+
+            ${[0, 1, 2].map(i => `
+              <button class="glass ${i ? '' : 'on'}"
+                  aria-label="View image ${i + 1}"
+                  onclick="pv(${id},${i})">
+
+                ${art(p, i)}
+
+              </button>
+            `).join('')}
+
+          </div>
+
+        </div>
+
+        <div>
+
+          <small>${p.g}</small>
+
+          <h1 style="font-size:2.4rem">
+            ${p.n}
+          </h1>
+
+          <div class="rt">${stars(p.r)}</div>
+
+          <div class="price">${fmt(p.p)}</div>
+
+          <p>${p.d}</p>
+
+          <label>${p.ol}</label>
+
+          <div class="chips"
+              style="margin-top:6px"
+              id="popt">
+
+            ${p.o.map((o, i) => `
+              <button class="chip ${i ? '' : 'on'}"
+                  onclick="po(this,'${o}')">
+                ${o}
+              </button>
+            `).join('')}
+
+          </div>
+
+          <label>Quantity</label>
+
+          <div class="qty">
+
+            <button aria-label="Decrease"
+                onclick="pq(-1)">−</button>
+
+            <span id="pq">1</span>
+
+            <button aria-label="Increase"
+                onclick="pq(1)">+</button>
+
+          </div>
+
+          <div class="btns">
+
+            <button class="btn"
+                onclick="add(${p.id},sel.q,sel.o)">
+              Add to cart
+            </button>
+
+            <a class="btn ghost" href="#cart">
+              View bag
+            </a>
+
+          </div>
+
+          <table class="spec">
+
+            ${p.s.map(r => `
+              <tr>
+                <td>${r[0]}</td>
+                <td>${r[1]}</td>
+              </tr>
+            `).join('')}
+
+          </table>
+
+        </div>
+
       </div>
 
-      <div class="product-info">
+      <section>
 
-        <small>${p.c}</small>
+        <div class="sh">
+          <h2>You may also like</h2>
+        </div>
 
-        <h1>${p.n}</h1>
+        <div class="grid">
+          ${rel.map(card).join('')}
+        </div>
 
-        <div class="rt">${stars(p.r)}</div>
-
-        <h2>${fmt(p.p)}</h2>
-
-        <p>${p.d}</p>
-
-        <label for="option">Choose option</label>
-
-        <select id="option">
-          ${p.o.map(o => `<option value="${o}">${o}</option>`).join('')}
-        </select>
-
-        <label for="quantity">Quantity</label>
-        <input id="quantity" type="number" min="1" max="20" value="1">
-
-        <button class="btn" onclick="add(${p.id},
-          Number($('quantity').value), $('option').value)">
-          Add to cart
-        </button>
-
-      </div>
+      </section>
 
     </div>
   `;
+}
+
+function pv(id, i) {
+  $('pmain').innerHTML = art(prod(id), i);
+
+  [...$('pth').children].forEach((b, k) => {
+    b.classList.toggle('on', k == i);
+  });
+}
+
+function po(b, o) {
+  sel.o = o;
+
+  [...$('popt').children].forEach(c => {
+    c.classList.toggle('on', c == b);
+  });
+}
+
+function pq(d) {
+  sel.q = Math.max(1, Math.min(20, sel.q + d));
+
+  $('pq').textContent = sel.q;
 }
 
 
@@ -566,67 +799,128 @@ function product(id) {
 function cartPg() {
   if (!cart.length) {
     return `
-      <div class="wrap center" style="padding:80px 22px">
+      <div class="wrap center"
+          style="padding:80px 22px">
+
         <h1>Your bag is empty</h1>
-        <a href="#shop" class="btn mt">Continue shopping</a>
+
+        <p class="mt">
+          Browse the shop to find something they will love.
+        </p>
+
+        <a class="btn" href="#shop">Go to shop</a>
+
       </div>
     `;
   }
 
   return `
-    <div class="wrap">
+    <div class="wrap" style="padding-top:36px">
 
-      <h1>Your shopping bag</h1>
+      <h1 style="font-size:2.6rem;margin-bottom:24px">
+        Your bag
+      </h1>
 
-      <div class="cartw mt">
+      <div class="cartw">
 
-        <div class="cart-items">
+        <div>
 
           ${cart.map((l, i) => {
     const p = prod(l.id);
 
     return `
-              <article class="cart-item glass">
+              <div class="line glass">
 
-                <img src="img/product-${p.id}.jpg"
-                  alt="${p.n}" class="cart-photo">
+                ${art(p)}
 
                 <div>
-                  <h3>${p.n}</h3>
-                  <p>${l.o}</p>
-                  <b>${fmt(p.p)}</b>
 
-                  <div class="quantity">
-                    <button onclick="chg(${i}, -1)">−</button>
-                    <span>${l.q}</span>
-                    <button onclick="chg(${i}, 1)">+</button>
-                  </div>
+                  <a href="#product-${p.id}">
+                    <b>${p.n}</b>
+                  </a>
 
-                  <button onclick="rm(${i})">Remove</button>
+                  <br>
+
+                  <small>
+                    ${p.ol}: ${l.o}
+                  </small>
+
+                  <br>
+
+                  ${fmt(p.p)}
+
                 </div>
 
-              </article>
+                <div style="
+                    display:flex;
+                    gap:12px;
+                    align-items:center;
+                    justify-content:flex-end">
+
+                  <div class="qty">
+
+                    <button aria-label="Decrease"
+                        onclick="chg(${i},-1)">
+                      −
+                    </button>
+
+                    <span>${l.q}</span>
+
+                    <button aria-label="Increase"
+                        onclick="chg(${i},1)">
+                      +
+                    </button>
+
+                  </div>
+
+                  <button class="chip"
+                      onclick="rm(${i})">
+                    Remove
+                  </button>
+
+                </div>
+
+              </div>
             `;
   }).join('')}
 
         </div>
 
-        <aside class="glass sum">
+        <aside class="sum glass">
 
-          <h2>Order summary</h2>
+          <h3>Order summary</h3>
 
-          <p>Subtotal: ${fmt(sub())}</p>
-          <p>Shipping: ${fmt(ship())}</p>
+          ${summ()}
 
-          <hr>
-
-          <h3>Total: ${fmt(sub() + ship())}</h3>
-
-          <a href="#checkout" class="btn">Proceed to checkout</a>
+          <a class="btn"
+              style="width:100%;margin-top:16px"
+              href="#checkout">
+            Checkout
+          </a>
 
         </aside>
 
       </div>
+
+    </div>
+  `;
+}
+
+function summ() {
+  return `
+    <div class="row">
+      <span>Subtotal</span>
+      <span>${fmt(sub())}</span>
+    </div>
+
+    <div class="row">
+      <span>Delivery</span>
+      <span>${ship() ? fmt(ship()) : 'Free'}</span>
+    </div>
+
+    <div class="row tot">
+      <span>Total</span>
+      <span>${fmt(sub() + ship())}</span>
     </div>
   `;
 }
@@ -637,46 +931,114 @@ function cartPg() {
 ========================================= */
 
 function checkout() {
-  if (!cart.length) {
-    return `
-      <div class="wrap center">
-        <h1>Your bag is empty</h1>
-        <a href="#shop" class="btn">Shop now</a>
-      </div>
-    `;
-  }
+  if (!cart.length) return cartPg();
 
   return `
-    <div class="wrap">
+    <div class="wrap" style="padding-top:36px">
 
-      <h1>Checkout</h1>
+      <h1 style="font-size:2.6rem;margin-bottom:24px">
+        Checkout
+      </h1>
 
-      <form id="checkout-form" class="glass"
-        onsubmit="placeOrder(event)">
+      <div class="cartw">
 
-        <label for="customer-name">Full name</label>
-        <input id="customer-name" required>
+        <form class="glass"
+            style="padding:26px"
+            id="cf"
+            novalidate
+            onsubmit="place(event)">
 
-        <label for="customer-email">Email</label>
-        <input id="customer-email" type="email" required>
+          <div class="form">
 
-        <label for="customer-phone">Phone</label>
-        <input id="customer-phone" required>
+            ${[
+    ['name', 'Full name', 'text', 'f'],
+    ['email', 'Email', 'email', ''],
+    ['phone', 'Mobile number', 'tel', ''],
+    ['addr', 'Street address', 'text', 'f'],
+    ['city', 'City', 'text', ''],
+    ['zip', 'Postal code', 'text', '']
+  ].map(f => `
+              <div class="${f[3]}">
 
-        <label for="customer-address">Delivery address</label>
-        <textarea id="customer-address" required></textarea>
+                <label for="${f[0]}">
+                  ${f[1]}
+                </label>
 
-        <label for="payment">Payment method</label>
-        <select id="payment">
-          <option value="GCash">GCash</option>
-          <option value="Cash on Delivery">Cash on Delivery</option>
-        </select>
+                <input id="${f[0]}" type="${f[2]}">
 
-        <h3>Total: ${fmt(sub() + ship())}</h3>
+                <div class="err" id="e-${f[0]}"></div>
 
-        <button class="btn" type="submit">Place order</button>
+              </div>
+            `).join('')}
 
-      </form>
+            <div class="f">
+
+              <label>Payment method</label>
+
+              <div class="pay">
+
+                <label>
+                  <input type="radio"
+                      name="pay"
+                      value="Cash on Delivery"
+                      checked
+                      onchange="$('gc').style.display='none'">
+
+                  Cash on Delivery
+                </label>
+
+                <label>
+                  <input type="radio"
+                      name="pay"
+                      value="GCash"
+                      onchange="$('gc').style.display='block'">
+
+                  GCash
+                </label>
+
+              </div>
+
+              <p id="gc"
+                  style="display:none;margin-top:10px">
+
+                GCash payment is a demonstration only.
+                No actual payment will be processed.
+
+              </p>
+
+            </div>
+
+          </div>
+
+          <button class="btn mt" type="submit">
+            Place order
+          </button>
+
+        </form>
+
+        <aside class="sum glass">
+
+          <h3>Order summary</h3>
+
+          ${cart.map(l => `
+            <div class="row">
+
+              <span>
+                ${prod(l.id).n} × ${l.q}
+              </span>
+
+              <span>
+                ${fmt(prod(l.id).p * l.q)}
+              </span>
+
+            </div>
+          `).join('')}
+
+          ${summ()}
+
+        </aside>
+
+      </div>
 
     </div>
   `;
@@ -684,30 +1046,89 @@ function checkout() {
 
 
 /* =========================================
-   13. PLACE ORDER
+   13. ORDER VALIDATION AND CONFIRMATION
 ========================================= */
 
 let last = null;
 
-async function placeOrder(e) {
+async function place(e) {
   e.preventDefault();
 
+  let ok = true;
+
+  // Customer validation rules
+  const v = {
+    name: x => x.length >= 2,
+    email: x => /^\S+@\S+\.\S+$/.test(x),
+    phone: x => /^(\+63|0)?9\d{9}$/.test(
+      x.replace(/[\s-]/g, '')
+    ),
+    addr: x => x.length >= 6,
+    city: x => x.length >= 2,
+    zip: x => /^\d{4}$/.test(x)
+  };
+
+  // Validation error messages
+  const m = {
+    name: 'Please enter your full name.',
+    email: 'Please enter a valid email address.',
+    phone: 'Please enter a valid Philippine mobile number.',
+    addr: 'Please enter a complete street address.',
+    city: 'Please enter your city.',
+    zip: 'Postal code must contain 4 digits.'
+  };
+
+  // Validate all customer fields FIRST
+  for (const k in v) {
+    const i = $(k);
+    const good = v[k](i.value.trim());
+
+    i.classList.toggle('bad', !good);
+    $('e-' + k).textContent = good ? '' : m[k];
+
+    if (!good) {
+      if (ok) i.focus();
+      ok = false;
+    }
+  }
+
+  // Stop if customer information is invalid
+  if (!ok) return;
+
+  if (!cart.length) {
+    toast('Your cart is empty.');
+    return;
+  }
+
+  const paymentInput = document.querySelector(
+    '[name=pay]:checked'
+  );
+
+  if (!paymentInput) {
+    toast('Please select a payment method.');
+    return;
+  }
+
+  // Prepare checkout information
   const payload = {
     customer: {
-      name: $('customer-name').value.trim(),
-      email: $('customer-email').value.trim(),
-      phone: $('customer-phone').value.trim(),
-      address: $('customer-address').value.trim()
+      name: $('name').value.trim(),
+      email: $('email').value.trim(),
+      phone: $('phone').value.trim(),
+      addr: $('addr').value.trim(),
+      city: $('city').value.trim(),
+      zip: $('zip').value.trim()
     },
-    payment: $('payment').value,
+    payment: paymentInput.value,
     items: cart.map(l => ({
-      id: l.id,
-      option: l.o,
-      quantity: l.q
+      id: Number(l.id),
+      o: l.o,
+      q: l.q
     }))
   };
 
-  const submitBtn = e.target.querySelector('[type="submit"]');
+  const submitBtn = e.submitter ||
+    $('cf').querySelector('[type="submit"]');
 
   if (submitBtn) {
     submitBtn.disabled = true;
@@ -715,7 +1136,8 @@ async function placeOrder(e) {
   }
 
   try {
-    const r = await fetch('api/orders.php', {
+    // Send order to PHP backend
+    const r = await fetch('api/place-order.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -725,6 +1147,7 @@ async function placeOrder(e) {
 
     const data = await r.json();
 
+    // Do not show confirmation if PHP fails
     if (!r.ok) {
       throw new Error(data.error || 'Order failed.');
     }
@@ -733,6 +1156,7 @@ async function placeOrder(e) {
       throw new Error('Invalid server response.');
     }
 
+    // Save actual server response
     last = {
       no: data.no,
       name: payload.customer.name,
@@ -740,9 +1164,11 @@ async function placeOrder(e) {
       total: Number(data.total)
     };
 
+    // Clear cart only after successful database insertion
     cart = [];
     save();
 
+    // Display confirmation
     location.hash = 'confirmed';
 
   } catch (err) {
@@ -757,21 +1183,25 @@ async function placeOrder(e) {
   }
 }
 
-
 function confirmed() {
   if (!last) {
     return `
-      <div class="wrap center" style="padding:80px 22px">
+      <div class="wrap center"
+          style="padding:80px 22px">
+
         <h1>No recent order</h1>
+
         <p class="mt">
           <a class="btn" href="#shop">Go to shop</a>
         </p>
+
       </div>
     `;
   }
 
   return `
-    <div class="wrap" style="max-width:640px;padding:70px 22px">
+    <div class="wrap"
+        style="max-width:640px;padding:70px 22px">
 
       <div class="glass center" style="padding:44px">
 
@@ -784,16 +1214,25 @@ function confirmed() {
           No actual payment or delivery has been arranged.
         </p>
 
-        <div class="row" style="justify-content:center;gap:30px">
+        <div class="row"
+            style="justify-content:center;gap:30px">
 
-          <span>Total: <b>${fmt(last.total)}</b></span>
-          <span>Payment: <b>${last.pay}</b></span>
+          <span>
+            Total: <b>${fmt(last.total)}</b>
+          </span>
+
+          <span>
+            Payment: <b>${last.pay}</b>
+          </span>
 
         </div>
 
-        <a class="btn mt" href="#home">Back to home</a>
+        <a class="btn mt" href="#home">
+          Back to home
+        </a>
 
       </div>
+
     </div>
   `;
 }
@@ -852,15 +1291,23 @@ function about() {
     ]
   ].map(c => `
           <div class="glass quote">
+
             <h3>${c[0]}</h3>
 
-            <p style="font-family:var(--sans);font-size:15px;margin-top:8px">
+            <p style="
+                font-family:var(--sans);
+                font-size:15px;
+                margin-top:8px">
+
               ${c[1]}
+
             </p>
+
           </div>
         `).join('')}
 
       </div>
+
     </div>
   `;
 }
@@ -878,8 +1325,11 @@ function contact() {
 
       <div class="cartw mt">
 
-        <form class="glass" style="padding:26px"
-          id="kf" novalidate onsubmit="send(event)">
+        <form class="glass"
+            style="padding:26px"
+            id="kf"
+            novalidate
+            onsubmit="send(event)">
 
           <div class="form">
 
@@ -903,7 +1353,9 @@ function contact() {
 
           </div>
 
-          <button class="btn mt" type="submit">Send message</button>
+          <button class="btn mt" type="submit">
+            Send message
+          </button>
 
           <p id="ok" class="mt" style="font-weight:600"></p>
 
@@ -931,7 +1383,9 @@ function contact() {
 
       <section>
 
-        <h2 style="margin-bottom:18px">Frequently asked questions</h2>
+        <h2 style="margin-bottom:18px">
+          Frequently asked questions
+        </h2>
 
         ${[
     [
@@ -952,8 +1406,11 @@ function contact() {
     ]
   ].map(q => `
           <details class="glass">
+
             <summary>${q[0]}</summary>
+
             <p>${q[1]}</p>
+
           </details>
         `).join('')}
 
@@ -974,6 +1431,7 @@ async function send(e) {
     ['km', x => x.length >= 10, 'Write at least 10 characters.']
   ];
 
+  // Validate form fields
   fields.forEach(([k, f, m]) => {
     const i = $(k);
     const good = f(i.value.trim());
@@ -1034,7 +1492,6 @@ async function send(e) {
 ========================================= */
 
 function route() {
-
   const h = location.hash.slice(1) || 'home';
 
   let html;
@@ -1045,7 +1502,6 @@ function route() {
   $('links').classList.remove('open');
 
   if (s) {
-
     S.cat =
       s[1] == 'dogs' ? 1 :
         s[1] == 'cats' ? 2 :
@@ -1077,14 +1533,12 @@ function route() {
   }
 
   document.querySelectorAll('.links a').forEach(a => {
-
     a.classList.toggle(
       'on',
       a.getAttribute('href') == '#' + (s ? h : k) ||
       (k == 'shop' && S.cat == 1 && a.getAttribute('href') == '#shop-dogs') ||
       (k == 'shop' && S.cat == 2 && a.getAttribute('href') == '#shop-cats')
     );
-
   });
 
   window.scrollTo(0, 0);
