@@ -1,10 +1,8 @@
-
 /* =========================================
    1. GENERAL SETTINGS
 ========================================= */
 
 const fmt = n => '₱' + n.toLocaleString('en-PH');
-
 const $ = id => document.getElementById(id);
 
 let P = [];
@@ -73,17 +71,17 @@ function stars(r) {
   const count = Math.round(r);
 
   return `
-        ${Array.from({ length: 5 }, (_, i) => `
-            <i class="${i < count ? 'ri-star-fill' : 'ri-star-line'}"
-               aria-hidden="true"></i>
-        `).join('')}
-        <span>${r.toFixed(1)}</span>
-    `;
+    ${Array.from({ length: 5 }, (_, i) => `
+      <i class="${i < count ? 'ri-star-fill' : 'ri-star-line'}"
+         aria-hidden="true"></i>
+    `).join('')}
+    <span>${r.toFixed(1)}</span>
+  `;
 }
 
 
 /* =========================================
-   4. PRODUCT ILLUSTRATIONS
+   4. PRODUCT ILLUSTRATIONS / PHOTOS
 ========================================= */
 
 const IC = {
@@ -106,43 +104,14 @@ const IC = {
     '<path d="M100 150C50 116 50 72 80 66c10-2 18 4 20 12 2-8 10-14 20-12 30 6 30 50-20 84z"/><path d="M100 90v28M86 104h28"/>'
 };
 
-function art(p, v = 0) {
-  const g = p.g;
-  const ox = [0, 30, -30][v];
-  const bg = ['#E3B5A4', '#F5E9E2', '#EBCBBE'][v];
-
+// PRODUCT IMAGE INTEGRATION
+function art(p) {
   return `
-        <svg viewBox="0 0 200 200" role="img" aria-label="${p.n}">
-            <rect width="200" height="200" fill="${bg}"/>
-
-            <circle
-                cx="${150 + ox}"
-                cy="${48 + v * 8}"
-                r="${58 - v * 8}"
-                fill="#F5E9E2"
-                opacity=".55"
-            />
-
-            <circle
-                cx="${30 - ox / 2}"
-                cy="170"
-                r="${40 + v * 8}"
-                fill="#773344"
-                opacity=".08"
-            />
-
-            <g fill="#F5E9E2"
-               fill-opacity=".7"
-               stroke="#773344"
-               stroke-width="3"
-               stroke-linecap="round"
-               stroke-linejoin="round">
-
-                ${IC[g]}
-
-            </g>
-        </svg>
-    `;
+    <img class="product-photo"
+         src="img/product-${p.id}.jpg"
+         alt="${p.n}"
+         loading="lazy">
+  `;
 }
 
 
@@ -152,41 +121,41 @@ function art(p, v = 0) {
 
 function card(p) {
   return `
-        <article class="card glass">
+    <article class="card glass">
 
-            <a href="#product-${p.id}" aria-label="${p.n}">
-                ${art(p)}
-            </a>
+      <a href="#product-${p.id}" aria-label="${p.n}">
+        ${art(p)}
+      </a>
 
-            <div class="ci">
+      <div class="ci">
 
-                <small>
-                    ${p.pet == 'both'
+        <small>
+          ${p.pet == 'both'
     ? 'Dogs & Cats'
     : p.pet == 'dog'
       ? 'For Dogs'
       : 'For Cats'}
-                </small>
+        </small>
 
-                <h3>
-                    <a href="#product-${p.id}">
-                        ${p.n}
-                    </a>
-                </h3>
+        <h3>
+          <a href="#product-${p.id}">
+            ${p.n}
+          </a>
+        </h3>
 
-                <div class="rt">${stars(p.r)}</div>
+        <div class="rt">${stars(p.r)}</div>
 
-                <div class="row">
-                    <b>${fmt(p.p)}</b>
+        <div class="row">
+          <b>${fmt(p.p)}</b>
 
-                    <button class="btn sm" onclick="add(${p.id})">
-                        Add to cart
-                    </button>
-                </div>
+          <button class="btn sm" onclick="add(${p.id})">
+            Add to cart
+          </button>
+        </div>
 
-            </div>
-        </article>
-    `;
+      </div>
+    </article>
+  `;
 }
 
 
@@ -232,7 +201,6 @@ function add(id, q = 1, o) {
   if (!p) return;
 
   o = o || p.o[0];
-
   q = Number(q);
 
   if (!Number.isInteger(q) || q < 1 || q > 20) {
@@ -255,11 +223,7 @@ function add(id, q = 1, o) {
 
     l.q += q;
   } else {
-    cart.push({
-      id,
-      o,
-      q
-    });
+    cart.push({ id, o, q });
   }
 
   save();
@@ -343,215 +307,118 @@ function heroArt(v) {
   const b = v ? '#F5E9E2' : '#E3B5A4';
 
   return `
-        <svg viewBox="0 0 400 400"
-            style="display:block;width:100%;height:100%"
-            role="img"
-            aria-label="Illustration of a dog and a cat side by side">
+    <svg viewBox="0 0 400 400"
+      style="display:block;width:100%;height:100%"
+      role="img"
+      aria-label="Illustration of a dog and a cat side by side">
 
-            <rect width="400" height="400" fill="${b}"/>
+      <rect width="400" height="400" fill="${b}"/>
+      <circle cx="300" cy="90" r="120" fill="${a}" opacity=".7"/>
+      <circle cx="60" cy="360" r="110" fill="#773344" opacity=".1"/>
 
-            <circle cx="300" cy="90" r="120"
-                fill="${a}" opacity=".7"/>
+      <g stroke="#773344" stroke-width="5"
+         stroke-linejoin="round" stroke-linecap="round">
 
-            <circle cx="60" cy="360" r="110"
-                fill="#773344" opacity=".1"/>
+        <path d="M70 300V200a70 70 0 01140 0v100z" fill="${a}"/>
 
-            <g stroke="#773344"
-                stroke-width="5"
-                stroke-linejoin="round"
-                stroke-linecap="round">
+        <path d="M82 150c-34 0-40 70-18 86
+          16-22 20-50 18-86zM198 150c34 0 40 70
+          18 86-16-22-20-50-18-86z" fill="#773344"/>
 
-                <path d="M70 300V200a70 70 0 01140 0v100z"
-                    fill="${a}"/>
+        <circle cx="118" cy="190" r="6" fill="#773344"/>
+        <circle cx="162" cy="190" r="6" fill="#773344"/>
 
-                <path d="M82 150c-34 0-40 70-18 86
-                    16-22 20-50 18-86zM198 150c34 0 40 70
-                    18 86-16-22-20-50-18-86z"
-                    fill="#773344"/>
+        <path d="M128 220q12 10 24 0M140 206v10" fill="none"/>
 
-                <circle cx="118" cy="190" r="6" fill="#773344"/>
-                <circle cx="162" cy="190" r="6" fill="#773344"/>
+        <path d="M215 300V230a60 60 0 01120 0v70z"
+          fill="#E3B5A4" opacity=".95"/>
 
-                <path d="M128 220q12 10 24 0M140 206v10"
-                    fill="none"/>
+        <path d="M225 190l10-48 32 22M325 190l-10-48-32 22"
+          fill="#E3B5A4"/>
 
-                <path d="M215 300V230a60 60 0 01120 0v70z"
-                    fill="#E3B5A4" opacity=".95"/>
+        <circle cx="250" cy="232" r="5" fill="#773344"/>
+        <circle cx="296" cy="232" r="5" fill="#773344"/>
 
-                <path d="M225 190l10-48 32 22M325 190l-10-48-32 22"
-                    fill="#E3B5A4"/>
+        <path d="M265 250q8 8 16 0M273 244v6
+          M230 248l-18-4M230 256l-18 6
+          M316 248l18-4M316 256l18 6" fill="none"/>
 
-                <circle cx="250" cy="232" r="5" fill="#773344"/>
-                <circle cx="296" cy="232" r="5" fill="#773344"/>
-
-                <path d="M265 250q8 8 16 0M273 244v6
-                    M230 248l-18-4M230 256l-18 6
-                    M316 248l18-4M316 256l18 6"
-                    fill="none"/>
-
-            </g>
-        </svg>
-    `;
+      </g>
+    </svg>
+  `;
 }
 
 function home() {
   const top = P.filter(p => p.b).slice(0, 4);
 
   return `
-        <div class="wrap">
+    <div class="wrap">
 
-            <div class="hero">
+      <div class="hero">
 
-                <div>
-                    <h1>Everything they love, all in one place.</h1>
+        <div>
+          <h1>Everything they love, all in one place.</h1>
 
-                    <p class="mt">
-                        Paws&Whiskers is a small boutique of beautiful,
-                        well-made essentials for dogs and cats.
-                        Every beanbag, brush and bowl is chosen by us,
-                        tested at home and made to last.
-                    </p>
+          <p class="mt">
+            Paws&Whiskers is a small boutique of beautiful,
+            well-made essentials for dogs and cats.
+            Every beanbag, brush and bowl is chosen by us,
+            tested at home and made to last.
+          </p>
 
-                    <div class="btns">
-                        <a class="btn" href="#shop-dogs">Shop for Dogs</a>
-                        <a class="btn ghost" href="#shop-cats">Shop for Cats</a>
-                    </div>
-                </div>
-
-                <div class="art glass">
-                    ${heroArt()}
-                </div>
-
-            </div>
+          <div class="btns">
+            <a class="btn" href="#shop-dogs">Shop for Dogs</a>
+            <a class="btn ghost" href="#shop-cats">Shop for Cats</a>
+          </div>
         </div>
 
-        <section>
-            <div class="wrap">
+        <div class="art glass">
+          ${heroArt()}
+        </div>
 
-                <div class="sh">
-                    <h2>Featured collections</h2>
-                    <a href="#shop" class="btn ghost sm">View all</a>
-                </div>
+      </div>
+    </div>
 
-                <div class="cols">
+    <section>
+      <div class="wrap">
 
-                    ${[
+        <div class="sh">
+          <h2>Featured collections</h2>
+          <a href="#shop" class="btn ghost sm">View all</a>
+        </div>
+
+        <div class="cols">
+
+          ${[
     ['Beds & Furniture', 'Beds & Furniture', 'Soft places to land'],
     ['Food & Treats', 'Food & Treats', 'Honest, well-sourced meals'],
     ['Accessories', 'Accessories', 'Leather, brass and linen'],
     ['Health & Wellness', 'Health & Wellness', 'Daily care, simplified']
   ].map(c => `
-                        <a class="coll glass"
-                            href="#shop-${CATS.indexOf(c[0])}">
+            <a class="coll glass" href="#shop-${CATS.indexOf(c[0])}">
+              <h3>${c[1]}</h3>
+              <span>${c[2]}</span>
+            </a>
+          `).join('')}
 
-                            <h3>${c[1]}</h3>
-                            <span>${c[2]}</span>
+        </div>
+      </div>
+    </section>
 
-                        </a>
-                    `).join('')}
+    <section>
+      <div class="wrap">
 
-                </div>
-            </div>
-        </section>
+        <div class="sh">
+          <h2>Best sellers</h2>
+        </div>
 
-        <section>
-            <div class="wrap">
+        <div class="grid">
+          ${top.map(card).join('')}
+        </div>
 
-                <div class="sh">
-                    <h2>Best sellers</h2>
-                </div>
-
-                <div class="grid">
-                    ${top.map(card).join('')}
-                </div>
-
-            </div>
-        </section>
-
-        <section>
-            <div class="wrap">
-
-                <div class="promo">
-
-                    <div>
-                        <h2>Free delivery on orders over ₱3,000</h2>
-
-                        <p class="mt">
-                            Plus a handwritten care note with your first order.
-                        </p>
-                    </div>
-
-                    <a class="btn" href="#shop">Start shopping</a>
-
-                </div>
-
-            </div>
-        </section>
-
-        <section>
-            <div class="wrap two">
-
-                <div class="art glass">
-                    ${heroArt(1)}
-                </div>
-
-                <div>
-                    <h2>A quieter kind of pet store</h2>
-
-                    <p class="mt">
-                        We started Paws&Whiskers because the things
-                        our pets use every day should be as considered
-                        as the rest of our homes. We stock fewer products,
-                        chosen for materials, craft and comfort.
-                        Only dogs and cats, because we would rather know them well.
-                    </p>
-
-                    <a class="btn ghost" href="#about">Our story</a>
-                </div>
-
-            </div>
-        </section>
-
-        <section>
-            <div class="wrap">
-
-                <div class="sh">
-                    <h2>Kind words</h2>
-                </div>
-
-                <div class="cols">
-
-                    ${[
-    [
-      'The orthopedic bed changed how our senior lab sleeps. It looks lovely in the living room, too.',
-      'Camille R.'
-    ],
-    [
-      'Our cat ignores every toy except the feather wand. It has lasted months.',
-      'Joaquin D.'
-    ],
-    [
-      'Delivery was fast and the packaging was beautiful. The leather collar is superb.',
-      'Ana L.'
-    ]
-  ].map(t => `
-                        <div class="quote glass">
-                            <p>“${t[0]}”</p>
-                            <b>${t[1]}</b>
-                            <div class="rt">
-                                <i class="ri-star-fill"></i>
-                                <i class="ri-star-fill"></i>
-                                <i class="ri-star-fill"></i>
-                                <i class="ri-star-fill"></i>
-                                <i class="ri-star-fill"></i>
-                            </div>
-                        </div>
-                    `).join('')}
-
-                </div>
-            </div>
-        </section>
-    `;
+      </div>
+    </section>
+  `;
 }
 
 
@@ -560,265 +427,135 @@ function home() {
 ========================================= */
 
 function shop() {
-  const g = CATS.map((c, i) => `
-        <button class="chip ${S.cat == i ? 'on' : ''}"
-            onclick="S.cat=${i};route()">
-            ${c}
-        </button>
-    `).join('');
+  const list = P.filter(p => {
+    const matchesSearch =
+      !S.q ||
+      p.n.toLowerCase().includes(S.q.toLowerCase()) ||
+      p.d.toLowerCase().includes(S.q.toLowerCase());
+
+    const matchesCategory =
+      S.cat === 0 ||
+      p.c === CATS[S.cat];
+
+    return matchesSearch && matchesCategory;
+  });
+
+  if (S.sort === 'lo') {
+    list.sort((a, b) => a.p - b.p);
+  } else if (S.sort === 'hi') {
+    list.sort((a, b) => b.p - a.p);
+  } else if (S.sort === 'new') {
+    list.sort((a, b) => b.id - a.id);
+  } else {
+    list.sort((a, b) => Number(b.b) - Number(a.b));
+  }
 
   return `
-        <div class="wrap" style="padding-top:36px">
+    <div class="wrap">
 
-            <h1 style="font-size:clamp(2rem,4vw,3rem)">
-                ${S.cat ? CATS[S.cat] : 'The shop'}
-            </h1>
+      <div class="sh">
+        <h1>Shop</h1>
+        <span>${list.length} products</span>
+      </div>
 
-            <div class="chips">${g}</div>
+      <div class="shop-tools">
 
-            <div class="tools">
-
-                <input id="fq"
-                    type="search"
-                    placeholder="Search products..."
-                    value="${S.q.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"
-                    aria-label="Search products"
-                    oninput="S.q=this.value;grid()">
-
-                <select aria-label="Sort"
-                    onchange="S.sort=this.value;grid()">
-
-                    ${SORTS.map(s => `
-                        <option value="${s[0]}"
-                            ${S.sort == s[0] ? 'selected' : ''}>
-                            ${s[1]}
-                        </option>
-                    `).join('')}
-
-                </select>
-
-            </div>
-
-            <p id="cnt2" class="mt" style="margin-bottom:12px"></p>
-
-            <div class="grid" id="pg"></div>
-
+        <div class="filters">
+          ${CATS.map((c, i) => `
+            <button class="filter ${S.cat === i ? 'active' : ''}"
+              onclick="setCat(${i})">${c}</button>
+          `).join('')}
         </div>
-    `;
+
+        <select onchange="setSort(this.value)">
+          ${SORTS.map(s => `
+            <option value="${s[0]}" ${S.sort === s[0] ? 'selected' : ''}>
+              ${s[1]}
+            </option>
+          `).join('')}
+        </select>
+
+      </div>
+
+      <div class="grid" id="product-grid">
+        ${list.map(card).join('')}
+      </div>
+
+      ${list.length === 0 ? '<p>No products found.</p>' : ''}
+
+    </div>
+  `;
+}
+
+function setCat(i) {
+  S.cat = i;
+  route();
+}
+
+function setSort(s) {
+  S.sort = s;
+  route();
 }
 
 function grid() {
-  const l = P.filter(p => {
-    const c = CATS[S.cat];
-
-    const matchesCategory =
-      S.cat == 0 ||
-      (c == 'Dog Essentials' && p.pet != 'cat') ||
-      (c == 'Cat Essentials' && p.pet != 'dog') ||
-      p.g == c;
-
-    const searchText = (
-      p.n + ' ' +
-      p.g + ' ' +
-      p.d + ' ' +
-      p.pet + ' ' +
-      p.o.join(' ') + ' ' +
-      p.ol
-    ).toLowerCase();
-
-    const matchesSearch = searchText.includes(
-      S.q.toLowerCase()
-    );
-
-    return matchesCategory && matchesSearch;
-  });
-
-  const f = {
-    best: (a, b) => b.b - a.b || b.r - a.r,
-    new: (a, b) => a.w - b.w,
-    lo: (a, b) => a.p - b.p,
-    hi: (a, b) => b.p - a.p
-  }[S.sort];
-
-  l.sort(f);
-
-  $('cnt2').textContent =
-    l.length + ' product' + (l.length == 1 ? '' : 's');
-
-  $('pg').innerHTML = l.length
-    ? l.map(card).join('')
-    : `
-            <div class="glass"
-                style="padding:30px;grid-column:1/-1">
-                Nothing matches that search.
-                Try a different word or clear the filters.
-            </div>
-        `;
+  const g = $('product-grid');
+  if (!g) return;
 }
 
 
 /* =========================================
-   10. PRODUCT DETAILS
+   10. PRODUCT DETAIL PAGE
 ========================================= */
-
-let sel = {};
 
 function product(id) {
   const p = prod(id);
 
-  if (!p) return shop();
-
-  sel = {
-    o: p.o[0],
-    q: 1,
-    v: 0
-  };
-
-  const rel = P.filter(x =>
-    x.id != id &&
-    (x.g == p.g || x.pet == p.pet)
-  ).slice(0, 4);
+  if (!p) {
+    return `
+      <div class="wrap center">
+        <h1>Product not found</h1>
+        <a href="#shop" class="btn">Back to shop</a>
+      </div>
+    `;
+  }
 
   return `
-        <div class="wrap">
+    <div class="wrap product-detail">
 
-            <p class="mt">
-                <a href="#shop">
-                    <i class="ri-arrow-left-line"></i> Back to shop
-                </a>
-            </p>
+      <div class="product-image glass">
+        ${art(p)}
+      </div>
 
-            <div class="pd">
+      <div class="product-info">
 
-                <div>
+        <small>${p.c}</small>
 
-                    <div class="main glass" id="pmain">
-                        ${art(p, 0)}
-                    </div>
+        <h1>${p.n}</h1>
 
-                    <div class="thumbs" id="pth">
+        <div class="rt">${stars(p.r)}</div>
 
-                        ${[0, 1, 2].map(i => `
-                            <button class="glass ${i ? '' : 'on'}"
-                                aria-label="View image ${i + 1}"
-                                onclick="pv(${id},${i})">
+        <h2>${fmt(p.p)}</h2>
 
-                                ${art(p, i)}
+        <p>${p.d}</p>
 
-                            </button>
-                        `).join('')}
+        <label for="option">Choose option</label>
 
-                    </div>
+        <select id="option">
+          ${p.o.map(o => `<option value="${o}">${o}</option>`).join('')}
+        </select>
 
-                </div>
+        <label for="quantity">Quantity</label>
+        <input id="quantity" type="number" min="1" max="20" value="1">
 
-                <div>
+        <button class="btn" onclick="add(${p.id},
+          Number($('quantity').value), $('option').value)">
+          Add to cart
+        </button>
 
-                    <small>${p.g}</small>
+      </div>
 
-                    <h1 style="font-size:2.4rem">
-                        ${p.n}
-                    </h1>
-
-                    <div class="rt">${stars(p.r)}</div>
-
-                    <div class="price">${fmt(p.p)}</div>
-
-                    <p>${p.d}</p>
-
-                    <label>${p.ol}</label>
-
-                    <div class="chips"
-                        style="margin-top:6px"
-                        id="popt">
-
-                        ${p.o.map((o, i) => `
-                            <button class="chip ${i ? '' : 'on'}"
-                                onclick="po(this,'${o}')">
-                                ${o}
-                            </button>
-                        `).join('')}
-
-                    </div>
-
-                    <label>Quantity</label>
-
-                    <div class="qty">
-
-                        <button aria-label="Decrease"
-                            onclick="pq(-1)">−</button>
-
-                        <span id="pq">1</span>
-
-                        <button aria-label="Increase"
-                            onclick="pq(1)">+</button>
-
-                    </div>
-
-                    <div class="btns">
-
-                        <button class="btn"
-                            onclick="add(${p.id},sel.q,sel.o)">
-                            Add to cart
-                        </button>
-
-                        <a class="btn ghost" href="#cart">
-                            View bag
-                        </a>
-
-                    </div>
-
-                    <table class="spec">
-
-                        ${p.s.map(r => `
-                            <tr>
-                                <td>${r[0]}</td>
-                                <td>${r[1]}</td>
-                            </tr>
-                        `).join('')}
-
-                    </table>
-
-                </div>
-
-            </div>
-
-            <section>
-
-                <div class="sh">
-                    <h2>You may also like</h2>
-                </div>
-
-                <div class="grid">
-                    ${rel.map(card).join('')}
-                </div>
-
-            </section>
-
-        </div>
-    `;
-}
-
-function pv(id, i) {
-  $('pmain').innerHTML = art(prod(id), i);
-
-  [...$('pth').children].forEach((b, k) => {
-    b.classList.toggle('on', k == i);
-  });
-}
-
-function po(b, o) {
-  sel.o = o;
-
-  [...$('popt').children].forEach(c => {
-    c.classList.toggle('on', c == b);
-  });
-}
-
-function pq(d) {
-  sel.q = Math.max(1, Math.min(20, sel.q + d));
-
-  $('pq').textContent = sel.q;
+    </div>
+  `;
 }
 
 
@@ -829,132 +566,69 @@ function pq(d) {
 function cartPg() {
   if (!cart.length) {
     return `
-            <div class="wrap center"
-                style="padding:80px 22px">
-
-                <h1>Your bag is empty</h1>
-
-                <p class="mt">
-                    Browse the shop to find something they will love.
-                </p>
-
-                <a class="btn" href="#shop">Go to shop</a>
-
-            </div>
-        `;
+      <div class="wrap center" style="padding:80px 22px">
+        <h1>Your bag is empty</h1>
+        <a href="#shop" class="btn mt">Continue shopping</a>
+      </div>
+    `;
   }
 
   return `
-        <div class="wrap" style="padding-top:36px">
+    <div class="wrap">
 
-            <h1 style="font-size:2.6rem;margin-bottom:24px">
-                Your bag
-            </h1>
+      <h1>Your shopping bag</h1>
 
-            <div class="cartw">
+      <div class="cartw mt">
 
-                <div>
+        <div class="cart-items">
 
-                    ${cart.map((l, i) => {
-
+          ${cart.map((l, i) => {
     const p = prod(l.id);
 
     return `
-                            <div class="line glass">
+              <article class="cart-item glass">
 
-                                ${art(p)}
+                <img src="img/product-${p.id}.jpg"
+                  alt="${p.n}" class="cart-photo">
 
-                                <div>
+                <div>
+                  <h3>${p.n}</h3>
+                  <p>${l.o}</p>
+                  <b>${fmt(p.p)}</b>
 
-                                    <a href="#product-${p.id}">
-                                        <b>${p.n}</b>
-                                    </a>
+                  <div class="quantity">
+                    <button onclick="chg(${i}, -1)">−</button>
+                    <span>${l.q}</span>
+                    <button onclick="chg(${i}, 1)">+</button>
+                  </div>
 
-                                    <br>
-
-                                    <small>
-                                        ${p.ol}: ${l.o}
-                                    </small>
-
-                                    <br>
-
-                                    ${fmt(p.p)}
-
-                                </div>
-
-                                <div style="
-                                    display:flex;
-                                    gap:12px;
-                                    align-items:center;
-                                    justify-content:flex-end">
-
-                                    <div class="qty">
-
-                                        <button aria-label="Decrease"
-                                            onclick="chg(${i},-1)">
-                                            −
-                                        </button>
-
-                                        <span>${l.q}</span>
-
-                                        <button aria-label="Increase"
-                                            onclick="chg(${i},1)">
-                                            +
-                                        </button>
-
-                                    </div>
-
-                                    <button class="chip"
-                                        onclick="rm(${i})">
-                                        Remove
-                                    </button>
-
-                                </div>
-
-                            </div>
-                        `;
-
-  }).join('')}
-
+                  <button onclick="rm(${i})">Remove</button>
                 </div>
 
-                <aside class="sum glass">
-
-                    <h3>Order summary</h3>
-
-                    ${summ()}
-
-                    <a class="btn"
-                        style="width:100%;margin-top:16px"
-                        href="#checkout">
-                        Checkout
-                    </a>
-
-                </aside>
-
-            </div>
+              </article>
+            `;
+  }).join('')}
 
         </div>
-    `;
-}
 
-function summ() {
-  return `
-        <div class="row">
-            <span>Subtotal</span>
-            <span>${fmt(sub())}</span>
-        </div>
+        <aside class="glass sum">
 
-        <div class="row">
-            <span>Delivery</span>
-            <span>${ship() ? fmt(ship()) : 'Free'}</span>
-        </div>
+          <h2>Order summary</h2>
 
-        <div class="row tot">
-            <span>Total</span>
-            <span>${fmt(sub() + ship())}</span>
-        </div>
-    `;
+          <p>Subtotal: ${fmt(sub())}</p>
+          <p>Shipping: ${fmt(ship())}</p>
+
+          <hr>
+
+          <h3>Total: ${fmt(sub() + ship())}</h3>
+
+          <a href="#checkout" class="btn">Proceed to checkout</a>
+
+        </aside>
+
+      </div>
+    </div>
+  `;
 }
 
 
@@ -963,207 +637,77 @@ function summ() {
 ========================================= */
 
 function checkout() {
-  if (!cart.length) return cartPg();
+  if (!cart.length) {
+    return `
+      <div class="wrap center">
+        <h1>Your bag is empty</h1>
+        <a href="#shop" class="btn">Shop now</a>
+      </div>
+    `;
+  }
 
   return `
-        <div class="wrap" style="padding-top:36px">
+    <div class="wrap">
 
-            <h1 style="font-size:2.6rem;margin-bottom:24px">
-                Checkout
-            </h1>
+      <h1>Checkout</h1>
 
-            <div class="cartw">
+      <form id="checkout-form" class="glass"
+        onsubmit="placeOrder(event)">
 
-                <form class="glass"
-                    style="padding:26px"
-                    id="cf"
-                    novalidate
-                    onsubmit="place(event)">
+        <label for="customer-name">Full name</label>
+        <input id="customer-name" required>
 
-                    <div class="form">
+        <label for="customer-email">Email</label>
+        <input id="customer-email" type="email" required>
 
-                        ${[
-    ['name', 'Full name', 'text', 'f'],
-    ['email', 'Email', 'email', ''],
-    ['phone', 'Mobile number', 'tel', ''],
-    ['addr', 'Street address', 'text', 'f'],
-    ['city', 'City', 'text', ''],
-    ['zip', 'Postal code', 'text', '']
-  ].map(f => `
-                            <div class="${f[3]}">
+        <label for="customer-phone">Phone</label>
+        <input id="customer-phone" required>
 
-                                <label for="${f[0]}">
-                                    ${f[1]}
-                                </label>
+        <label for="customer-address">Delivery address</label>
+        <textarea id="customer-address" required></textarea>
 
-                                <input id="${f[0]}" type="${f[2]}">
+        <label for="payment">Payment method</label>
+        <select id="payment">
+          <option value="GCash">GCash</option>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+        </select>
 
-                                <div class="err" id="e-${f[0]}"></div>
+        <h3>Total: ${fmt(sub() + ship())}</h3>
 
-                            </div>
-                        `).join('')}
+        <button class="btn" type="submit">Place order</button>
 
-                        <div class="f">
+      </form>
 
-                            <label>Payment method</label>
-
-                            <div class="pay">
-
-                                <label>
-                                    <input type="radio"
-                                        name="pay"
-                                        value="Cash on Delivery"
-                                        checked
-                                        onchange="$('gc').style.display='none'">
-
-                                    Cash on Delivery
-                                </label>
-
-                                <label>
-                                    <input type="radio"
-                                        name="pay"
-                                        value="GCash"
-                                        onchange="$('gc').style.display='block'">
-
-                                    GCash
-                                </label>
-
-                            </div>
-
-                            <p id="gc"
-                                style="display:none;margin-top:10px">
-
-                                GCash payment is a demonstration only.
-                                No actual payment will be processed.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <button class="btn mt" type="submit">
-                        Place order
-                    </button>
-
-                </form>
-
-                <aside class="sum glass">
-
-                    <h3>Order summary</h3>
-
-                    ${cart.map(l => `
-                        <div class="row">
-
-                            <span>
-                                ${prod(l.id).n} × ${l.q}
-                            </span>
-
-                            <span>
-                                ${fmt(prod(l.id).p * l.q)}
-                            </span>
-
-                        </div>
-                    `).join('')}
-
-                    ${summ()}
-
-                </aside>
-
-            </div>
-
-        </div>
-    `;
+    </div>
+  `;
 }
 
 
 /* =========================================
-   13. ORDER VALIDATION AND CONFIRMATION
+   13. PLACE ORDER
 ========================================= */
 
 let last = null;
 
-async function place(e) {
+async function placeOrder(e) {
   e.preventDefault();
 
-  let ok = true;
-
-  // Customer validation rules
-  const v = {
-    name: x => x.length >= 2,
-    email: x => /^\S+@\S+\.\S+$/.test(x),
-    phone: x => /^(\+63|0)?9\d{9}$/.test(
-      x.replace(/[\s-]/g, '')
-    ),
-    addr: x => x.length >= 6,
-    city: x => x.length >= 2,
-    zip: x => /^\d{4}$/.test(x)
-  };
-
-  // Validation error messages
-  const m = {
-    name: 'Please enter your full name.',
-    email: 'Please enter a valid email address.',
-    phone: 'Please enter a valid Philippine mobile number.',
-    addr: 'Please enter a complete street address.',
-    city: 'Please enter your city.',
-    zip: 'Postal code must contain 4 digits.'
-  };
-
-  // Validate all customer fields FIRST
-  for (const k in v) {
-    const i = $(k);
-    const good = v[k](i.value.trim());
-
-    i.classList.toggle('bad', !good);
-
-    $('e-' + k).textContent = good ? '' : m[k];
-
-    if (!good) {
-      if (ok) i.focus();
-      ok = false;
-    }
-  }
-
-  // Stop if customer information is invalid
-  if (!ok) return;
-
-  if (!cart.length) {
-    toast('Your cart is empty.');
-    return;
-  }
-
-  const paymentInput = document.querySelector(
-    '[name=pay]:checked'
-  );
-
-  if (!paymentInput) {
-    toast('Please select a payment method.');
-    return;
-  }
-
-  // Prepare checkout information
   const payload = {
     customer: {
-      name: $('name').value.trim(),
-      email: $('email').value.trim(),
-      phone: $('phone').value.trim(),
-      addr: $('addr').value.trim(),
-      city: $('city').value.trim(),
-      zip: $('zip').value.trim()
+      name: $('customer-name').value.trim(),
+      email: $('customer-email').value.trim(),
+      phone: $('customer-phone').value.trim(),
+      address: $('customer-address').value.trim()
     },
-
-    payment: paymentInput.value,
-
+    payment: $('payment').value,
     items: cart.map(l => ({
-      id: Number(l.id),
-      o: l.o,
-      q: l.q
+      id: l.id,
+      option: l.o,
+      quantity: l.q
     }))
   };
 
-  const submitBtn = e.submitter ||
-    $('cf').querySelector('[type="submit"]');
+  const submitBtn = e.target.querySelector('[type="submit"]');
 
   if (submitBtn) {
     submitBtn.disabled = true;
@@ -1171,8 +715,7 @@ async function place(e) {
   }
 
   try {
-    // Send order to PHP backend
-    const r = await fetch('api/place-order.php', {
+    const r = await fetch('api/orders.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -1182,7 +725,6 @@ async function place(e) {
 
     const data = await r.json();
 
-    // Do not show confirmation if PHP fails
     if (!r.ok) {
       throw new Error(data.error || 'Order failed.');
     }
@@ -1191,7 +733,6 @@ async function place(e) {
       throw new Error('Invalid server response.');
     }
 
-    // Save actual server response
     last = {
       no: data.no,
       name: payload.customer.name,
@@ -1199,11 +740,9 @@ async function place(e) {
       total: Number(data.total)
     };
 
-    // Clear cart only after successful database insertion
     cart = [];
     save();
 
-    // Display confirmation
     location.hash = 'confirmed';
 
   } catch (err) {
@@ -1222,254 +761,41 @@ async function place(e) {
 function confirmed() {
   if (!last) {
     return `
-            <div class="wrap center"
-                style="padding:80px 22px">
-
-                <h1>No recent order</h1>
-
-                <p class="mt">
-                    <a class="btn" href="#shop">Go to shop</a>
-                </p>
-
-            </div>
-        `;
+      <div class="wrap center" style="padding:80px 22px">
+        <h1>No recent order</h1>
+        <p class="mt">
+          <a class="btn" href="#shop">Go to shop</a>
+        </p>
+      </div>
+    `;
   }
 
   return `
-        <div class="wrap"
-            style="max-width:640px;padding:70px 22px">
+    <div class="wrap" style="max-width:640px;padding:70px 22px">
 
-            <div class="glass center" style="padding:44px">
+      <div class="glass center" style="padding:44px">
 
-                <h1>
-                    Thank you, ${last.name.split(' ')[0].replace(/[<>&]/g, '')}
-                </h1>
+        <h1>
+          Thank you, ${last.name.split(' ')[0].replace(/[<>&]/g, '')}
+        </h1>
 
-                <p class="mt">
-                    Your order <b>${last.no}</b> has been recorded.
-                    No actual payment or delivery has been arranged.
-                </p>
+        <p class="mt">
+          Your order <b>${last.no}</b> has been recorded.
+          No actual payment or delivery has been arranged.
+        </p>
 
-                <div class="row"
-                    style="justify-content:center;gap:30px">
+        <div class="row" style="justify-content:center;gap:30px">
 
-                    <span>
-                        Total: <b>${fmt(last.total)}</b>
-                    </span>
-
-                    <span>
-                        Payment: <b>${last.pay}</b>
-                    </span>
-
-                </div>
-
-                <a class="btn mt" href="#home">
-                    Back to home
-                </a>
-
-            </div>
+          <span>Total: <b>${fmt(last.total)}</b></span>
+          <span>Payment: <b>${last.pay}</b></span>
 
         </div>
-    `;
-}
 
+        <a class="btn mt" href="#home">Back to home</a>
 
-/* =========================================
-   MY ORDERS PAGE
-========================================= */
-
-function myOrders() {
-  return `
-    <div class="wrap" style="padding-top:36px">
-
-      <div class="sh">
-        <h1 style="font-size:2.6rem">My Orders</h1>
-
-        <a href="#shop" class="btn ghost sm">
-          Continue shopping
-        </a>
       </div>
-
-      <p class="mt">
-        View your previous purchases and check their status.
-      </p>
-
-      <div id="ordersList" class="mt">
-        <div class="glass" style="padding:24px">
-          Loading your orders...
-        </div>
-      </div>
-
     </div>
   `;
-}
-
-async function loadMyOrders() {
-  const container = $('ordersList');
-
-  if (!container) return;
-
-  const escapeHTML = value =>
-    String(value ?? '').replace(/[&<>"']/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    })[char]);
-
-  try {
-    const response = await fetch('api/my-orders.php');
-    const data = await response.json();
-
-    // Customer is not logged in
-    if (response.status === 401) {
-      container.innerHTML = `
-        <div class="glass center" style="padding:36px">
-          <h2>Please log in first</h2>
-
-          <p class="mt">
-            You need to log in to view your order history.
-          </p>
-
-          <button class="btn mt" type="button"
-            onclick="$('accountBtn').click()">
-            Log in
-          </button>
-        </div>
-      `;
-      return;
-    }
-
-    if (!response.ok || !data.success) {
-      throw new Error(data.message || 'Unable to load orders.');
-    }
-
-    if (!data.orders.length) {
-      container.innerHTML = `
-        <div class="glass center" style="padding:36px">
-          <h2>No orders yet</h2>
-
-          <p class="mt">
-            Your purchases will appear here once you place an order.
-          </p>
-
-          <a href="#shop" class="btn mt">
-            Explore the shop
-          </a>
-        </div>
-      `;
-      return;
-    }
-
-    container.innerHTML = data.orders.map(order => {
-      const date = new Date(
-        String(order.created_at).replace(' ', 'T')
-      );
-
-      const dateText = Number.isNaN(date.getTime())
-        ? escapeHTML(order.created_at)
-        : escapeHTML(date.toLocaleString('en-PH', {
-          dateStyle: 'medium',
-          timeStyle: 'short'
-        }));
-
-      const items = order.items.map(item => {
-        const p = prod(Number(item.product_id));
-
-        const productName = p
-          ? p.n
-          : 'Product #' + item.product_id;
-
-        const optionLabel = p ? p.ol : 'Option';
-
-        return `
-          <div class="row" style="padding:10px 0">
-            <div>
-              <b>${escapeHTML(productName)}</b>
-
-              <small style="display:block">
-                ${escapeHTML(optionLabel)}:
-                ${escapeHTML(item.option_value)}
-                · Qty: ${Number(item.quantity)}
-              </small>
-            </div>
-
-            <b>
-              ${fmt(Number(item.unit_price) * Number(item.quantity))}
-            </b>
-          </div>
-        `;
-      }).join('');
-
-      const status = String(order.status || 'pending');
-      const statusLabel = status.charAt(0).toUpperCase() +
-        status.slice(1);
-
-      return `
-        <article class="glass" style="padding:22px;margin-bottom:18px">
-
-          <div class="row" style="flex-wrap:wrap;gap:12px">
-            <div>
-              <small>Order number</small>
-              <h3>${escapeHTML(order.order_no)}</h3>
-            </div>
-
-            <span class="chip">
-              ${escapeHTML(statusLabel)}
-            </span>
-          </div>
-
-          <p class="mt">
-            <small>Placed on: ${dateText}</small>
-          </p>
-
-          <div style="margin-top:18px">
-            ${items}
-          </div>
-
-          <div class="row" style="margin-top:12px">
-            <span>Subtotal</span>
-            <span>${fmt(Number(order.subtotal))}</span>
-          </div>
-
-          <div class="row">
-            <span>Delivery</span>
-            <span>
-              ${Number(order.shipping) === 0
-        ? 'Free'
-        : fmt(Number(order.shipping))}
-            </span>
-          </div>
-
-          <div class="row tot">
-            <b>Total</b>
-            <b>${fmt(Number(order.total))}</b>
-          </div>
-
-          <p style="margin-top:12px">
-            <small>
-              Payment method:
-              ${escapeHTML(order.payment_method)}
-            </small>
-          </p>
-
-        </article>
-      `;
-    }).join('');
-
-  } catch (error) {
-    console.error('Order history error:', error);
-
-    container.innerHTML = `
-      <div class="glass center" style="padding:24px">
-        <p>Unable to load your orders.</p>
-        <button class="btn mt" onclick="loadMyOrders()">
-          Try again
-        </button>
-      </div>
-    `;
-  }
 }
 
 
@@ -1479,39 +805,39 @@ async function loadMyOrders() {
 
 function about() {
   return `
-        <div class="wrap">
+    <div class="wrap">
 
-            <div class="two" style="padding:50px 0">
+      <div class="two" style="padding:50px 0">
 
-                <div>
+        <div>
 
-                    <h1>Fewer things, chosen well.</h1>
+          <h1>Fewer things, chosen well.</h1>
 
-                    <p class="mt">
-                        Paws&Whiskers exists to give dogs and cats
-                        carefully selected, high-quality products.
-                        We look for natural materials, honest ingredients
-                        and good craft, and we test every item with
-                        our own animals before we sell it.
-                    </p>
+          <p class="mt">
+            Paws&Whiskers exists to give dogs and cats
+            carefully selected, high-quality products.
+            We look for natural materials, honest ingredients
+            and good craft, and we test every item with
+            our own animals before we sell it.
+          </p>
 
-                    <p>
-                        We sell for dogs and cats only.
-                        It keeps our range focused, and lets us
-                        know every product well enough to advise you.
-                    </p>
+          <p>
+            We sell for dogs and cats only.
+            It keeps our range focused, and lets us
+            know every product well enough to advise you.
+          </p>
 
-                </div>
+        </div>
 
-                <div class="art glass">
-                    ${heroArt()}
-                </div>
+        <div class="art glass">
+          ${heroArt()}
+        </div>
 
-            </div>
+      </div>
 
-            <div class="cols">
+      <div class="cols">
 
-                ${[
+        ${[
     [
       'Selected, not stocked',
       'Each product is reviewed for safety, materials and durability.'
@@ -1525,26 +851,18 @@ function about() {
       'Message us and a real person will help you choose.'
     ]
   ].map(c => `
-                    <div class="glass quote">
+          <div class="glass quote">
+            <h3>${c[0]}</h3>
 
-                        <h3>${c[0]}</h3>
+            <p style="font-family:var(--sans);font-size:15px;margin-top:8px">
+              ${c[1]}
+            </p>
+          </div>
+        `).join('')}
 
-                        <p style="
-                            font-family:var(--sans);
-                            font-size:15px;
-                            margin-top:8px">
-
-                            ${c[1]}
-
-                        </p>
-
-                    </div>
-                `).join('')}
-
-            </div>
-
-        </div>
-    `;
+      </div>
+    </div>
+  `;
 }
 
 
@@ -1554,75 +872,68 @@ function about() {
 
 function contact() {
   return `
-        <div class="wrap" style="padding-top:36px">
+    <div class="wrap" style="padding-top:36px">
 
-            <h1>Get in touch</h1>
+      <h1>Get in touch</h1>
 
-            <div class="cartw mt">
+      <div class="cartw mt">
 
-                <form class="glass"
-                    style="padding:26px"
-                    id="kf"
-                    novalidate
-                    onsubmit="send(event)">
+        <form class="glass" style="padding:26px"
+          id="kf" novalidate onsubmit="send(event)">
 
-                    <div class="form">
+          <div class="form">
 
-                        <div>
-                            <label for="kn">Name</label>
-                            <input id="kn">
-                            <div class="err" id="e-kn"></div>
-                        </div>
-
-                        <div>
-                            <label for="ke">Email</label>
-                            <input id="ke" type="email">
-                            <div class="err" id="e-ke"></div>
-                        </div>
-
-                        <div class="f">
-                            <label for="km">Message</label>
-                            <textarea id="km" rows="5"></textarea>
-                            <div class="err" id="e-km"></div>
-                        </div>
-
-                    </div>
-
-                    <button class="btn mt" type="submit">
-                        Send message
-                    </button>
-
-                    <p id="ok" class="mt" style="font-weight:600"></p>
-
-                </form>
-
-                <aside class="glass sum" style="position:static">
-
-                    <h3>Contact</h3>
-
-                    <p class="mt">
-                        hello@pawsandwhiskers.ph<br>
-                        +63 917 555 0142<br>
-                        Davao City, Philippines<br>
-                        Mon–Sat, 9 am–6 pm
-                    </p>
-
-                    <p>
-                        Instagram · Facebook · TikTok<br>
-                        @pawsandwhiskers
-                    </p>
-
-                </aside>
-
+            <div>
+              <label for="kn">Name</label>
+              <input id="kn">
+              <div class="err" id="e-kn"></div>
             </div>
 
-            <section>
+            <div>
+              <label for="ke">Email</label>
+              <input id="ke" type="email">
+              <div class="err" id="e-ke"></div>
+            </div>
 
-                <h2 style="margin-bottom:18px">
-                    Frequently asked questions
-                </h2>
+            <div class="f">
+              <label for="km">Message</label>
+              <textarea id="km" rows="5"></textarea>
+              <div class="err" id="e-km"></div>
+            </div>
 
-                ${[
+          </div>
+
+          <button class="btn mt" type="submit">Send message</button>
+
+          <p id="ok" class="mt" style="font-weight:600"></p>
+
+        </form>
+
+        <aside class="glass sum" style="position:static">
+
+          <h3>Contact</h3>
+
+          <p class="mt">
+            hello@pawsandwhiskers.ph<br>
+            +63 917 555 0142<br>
+            Davao City, Philippines<br>
+            Mon–Sat, 9 am–6 pm
+          </p>
+
+          <p>
+            Instagram · Facebook · TikTok<br>
+            @pawsandwhiskers
+          </p>
+
+        </aside>
+
+      </div>
+
+      <section>
+
+        <h2 style="margin-bottom:18px">Frequently asked questions</h2>
+
+        ${[
     [
       'How long does delivery take?',
       'Metro Davao: 1–2 days. Other areas in the Philippines: 3–7 days.'
@@ -1640,19 +951,16 @@ function contact() {
       'No. We only carry products for dogs and cats.'
     ]
   ].map(q => `
-                    <details class="glass">
+          <details class="glass">
+            <summary>${q[0]}</summary>
+            <p>${q[1]}</p>
+          </details>
+        `).join('')}
 
-                        <summary>${q[0]}</summary>
+      </section>
 
-                        <p>${q[1]}</p>
-
-                    </details>
-                `).join('')}
-
-            </section>
-
-        </div>
-    `;
+    </div>
+  `;
 }
 
 async function send(e) {
@@ -1666,7 +974,6 @@ async function send(e) {
     ['km', x => x.length >= 10, 'Write at least 10 characters.']
   ];
 
-  // Validate form fields
   fields.forEach(([k, f, m]) => {
     const i = $(k);
     const good = f(i.value.trim());
@@ -1759,7 +1066,6 @@ function route() {
       cart: cartPg,
       checkout,
       confirmed,
-      'my-orders': myOrders,
       about,
       contact
     }[k] || home)();
