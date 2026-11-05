@@ -7,296 +7,7 @@ const fmt = n => '₱' + n.toLocaleString('en-PH');
 
 const $ = id => document.getElementById(id);
 
-const P = [
-  {
-    id: 1,
-    n: 'Cashmere-Soft Orthopedic Bed',
-    p: 5490,
-    pet: 'dog',
-    g: 'Beds & Furniture',
-    r: 4.9,
-    b: 1,
-    w: 3,
-    o: ['Small', 'Medium', 'Large'],
-    ol: 'Size',
-    d: 'A memory-foam bed wrapped in a brushed, cashmere-soft cover. Supports joints and keeps its shape for years.',
-    s: [
-      ['Material', 'Memory foam, brushed polyester'],
-      ['Care', 'Removable, machine-washable cover'],
-      ['Fits', 'Up to 35 kg']
-    ]
-  },
-  {
-    id: 2,
-    n: 'Velvet Cloud Cat Cave',
-    p: 3290,
-    pet: 'cat',
-    g: 'Beds & Furniture',
-    r: 4.8,
-    b: 1,
-    w: 5,
-    o: ['Blush', 'Plum'],
-    ol: 'Color',
-    d: 'A hooded velvet hideaway with a plush cushion for deep, private naps.',
-    s: [
-      ['Material', 'Velvet, felt base'],
-      ['Size', '48 × 42 × 38 cm'],
-      ['Care', 'Spot clean']
-    ]
-  },
-  {
-    id: 3,
-    n: 'Grain-Free Salmon Kibble',
-    p: 1890,
-    pet: 'dog',
-    g: 'Food & Treats',
-    r: 4.7,
-    b: 1,
-    w: 2,
-    o: ['2 kg', '5 kg', '10 kg'],
-    ol: 'Size',
-    d: 'Wild salmon and sweet potato, slow-baked for easy digestion and a glossy coat.',
-    s: [
-      ['Protein', 'Salmon, 28%'],
-      ['Life stage', 'Adult'],
-      ['Grain-free', 'Yes']
-    ]
-  },
-  {
-    id: 4,
-    n: 'Wild Tuna Pâté Collection',
-    p: 980,
-    pet: 'cat',
-    g: 'Food & Treats',
-    r: 4.8,
-    b: 1,
-    w: 6,
-    o: ['Tuna', 'Chicken', 'Ocean mix'],
-    ol: 'Flavor',
-    d: 'Twelve silky pâté pouches with no fillers, made for picky eaters.',
-    s: [
-      ['Pack', '12 × 85 g'],
-      ['Moisture', '82%'],
-      ['Life stage', 'All ages']
-    ]
-  },
-  {
-    id: 5,
-    n: 'Organic Chicken Training Treats',
-    p: 450,
-    pet: 'dog',
-    g: 'Food & Treats',
-    r: 4.6,
-    b: 0,
-    w: 7,
-    o: ['Chicken', 'Pumpkin'],
-    ol: 'Flavor',
-    d: 'Small, soft, low-calorie bites that work well for training.',
-    s: [
-      ['Weight', '200 g'],
-      ['Calories', '2 kcal per treat'],
-      ['Ingredients', 'Single-protein']
-    ]
-  },
-  {
-    id: 6,
-    n: 'Braided Cotton Tug Toy',
-    p: 690,
-    pet: 'dog',
-    g: 'Toys & Entertainment',
-    r: 4.5,
-    b: 0,
-    w: 8,
-    o: ['Medium', 'Large'],
-    ol: 'Size',
-    d: 'Hand-braided natural cotton rope for tug, fetch and gentle chewing.',
-    s: [
-      ['Material', '100% cotton'],
-      ['Length', '35 cm'],
-      ['Care', 'Machine washable']
-    ]
-  },
-  {
-    id: 7,
-    n: 'Feather Wand Teaser',
-    p: 520,
-    pet: 'cat',
-    g: 'Toys & Entertainment',
-    r: 4.7,
-    b: 1,
-    w: 4,
-    o: ['Natural', 'Blush'],
-    ol: 'Color',
-    d: 'A flexible wand with replaceable feathers that sparks real hunting play.',
-    s: [
-      ['Length', '90 cm'],
-      ['Refills', '2 included'],
-      ['Material', 'Bamboo, feather']
-    ]
-  },
-  {
-    id: 8,
-    n: 'Catnip Felt Mice Set',
-    p: 380,
-    pet: 'cat',
-    g: 'Toys & Entertainment',
-    r: 4.4,
-    b: 0,
-    w: 9,
-    o: ['Set of 3'],
-    ol: 'Pack',
-    d: 'Three wool-felt mice filled with organic catnip.',
-    s: [
-      ['Material', 'Wool felt'],
-      ['Filling', 'Organic catnip'],
-      ['Pack', '3 pieces']
-    ]
-  },
-  {
-    id: 9,
-    n: 'Boar Bristle Grooming Brush',
-    p: 1150,
-    pet: 'both',
-    g: 'Grooming & Hygiene',
-    r: 4.8,
-    b: 1,
-    w: 1,
-    o: ['Short coat', 'Long coat'],
-    ol: 'Coat',
-    d: 'Natural bristles lift loose hair and spread coat oils for a lasting shine.',
-    s: [
-      ['Handle', 'Beech wood'],
-      ['Bristle', 'Natural boar'],
-      ['Suitable for', 'Dogs and cats']
-    ]
-  },
-  {
-    id: 10,
-    n: 'Oatmeal Calming Shampoo',
-    p: 780,
-    pet: 'dog',
-    g: 'Grooming & Hygiene',
-    r: 4.5,
-    b: 0,
-    w: 10,
-    o: ['250 ml', '500 ml'],
-    ol: 'Size',
-    d: 'A gentle oat and aloe wash that soothes dry, sensitive skin.',
-    s: [
-      ['pH', 'Balanced for dogs'],
-      ['Scent', 'Light lavender'],
-      ['Free from', 'Parabens, sulfates']
-    ]
-  },
-  {
-    id: 11,
-    n: 'Italian Leather Collar',
-    p: 1650,
-    pet: 'dog',
-    g: 'Accessories',
-    r: 4.9,
-    b: 1,
-    w: 11,
-    o: ['Small', 'Medium', 'Large'],
-    ol: 'Size',
-    d: 'Vegetable-tanned leather with a brushed brass buckle that softens with wear.',
-    s: [
-      ['Material', 'Full-grain leather'],
-      ['Hardware', 'Solid brass'],
-      ['Width', '2 cm']
-    ]
-  },
-  {
-    id: 12,
-    n: 'Breakaway Collar with Bell',
-    p: 750,
-    pet: 'cat',
-    g: 'Accessories',
-    r: 4.6,
-    b: 0,
-    w: 12,
-    o: ['Blush', 'Plum'],
-    ol: 'Color',
-    d: 'A soft velvet collar with a safety breakaway clasp and a tiny brass bell.',
-    s: [
-      ['Material', 'Velvet'],
-      ['Safety', 'Breakaway clasp'],
-      ['Adjustable', '20–30 cm']
-    ]
-  },
-  {
-    id: 13,
-    n: 'Ceramic Raised Feeder Bowl',
-    p: 1380,
-    pet: 'both',
-    g: 'Accessories',
-    r: 4.7,
-    b: 0,
-    w: 13,
-    o: ['Small', 'Large'],
-    ol: 'Size',
-    d: 'A weighted ceramic bowl on a raised walnut stand. Easier on necks and joints.',
-    s: [
-      ['Material', 'Glazed ceramic, walnut'],
-      ['Capacity', '450 ml'],
-      ['Care', 'Dishwasher safe bowl']
-    ]
-  },
-  {
-    id: 14,
-    n: 'Joint Support Soft Chews',
-    p: 1490,
-    pet: 'dog',
-    g: 'Health & Wellness',
-    r: 4.7,
-    b: 1,
-    w: 14,
-    o: ['60 chews', '120 chews'],
-    ol: 'Pack',
-    d: 'Glucosamine, green-lipped mussel and turmeric in a soft daily chew.',
-    s: [
-      ['Dose', '1 chew per 10 kg daily'],
-      ['Flavor', 'Roast chicken'],
-      ['Made in', 'Small batches']
-    ]
-  },
-  {
-    id: 15,
-    n: 'Daily Probiotic Powder',
-    p: 1290,
-    pet: 'cat',
-    g: 'Health & Wellness',
-    r: 4.6,
-    b: 0,
-    w: 15,
-    o: ['30 sachets'],
-    ol: 'Pack',
-    d: 'A tasteless powder that supports gut health. Sprinkle over meals.',
-    s: [
-      ['Strains', '5 live cultures'],
-      ['Pack', '30 × 1 g'],
-      ['Flavor', 'Unflavored']
-    ]
-  },
-  {
-    id: 16,
-    n: 'Sisal Scratching Tower',
-    p: 4290,
-    pet: 'cat',
-    g: 'Beds & Furniture',
-    r: 4.8,
-    b: 0,
-    w: 16,
-    o: ['Oat', 'Plum'],
-    ol: 'Color',
-    d: 'A tall, stable tower with sisal posts, a perch and a hideaway.',
-    s: [
-      ['Height', '110 cm'],
-      ['Material', 'Sisal, plush, pine'],
-      ['Assembly', 'Tool-free']
-    ]
-  }
-];
+let P = [];
 
 
 /* =========================================
@@ -324,28 +35,19 @@ const SORTS = [
 
 let cart = [];
 
-try {
-  const stored = JSON.parse(localStorage.getItem('mp-cart') || '[]');
-
-  if (Array.isArray(stored)) {
-    cart = stored.filter(item => {
-      const p = P.find(product => product.id === Number(item?.id));
-
-      return (
-        p &&
-        Number.isInteger(item.q) &&
-        item.q > 0 &&
-        item.q <= 20 &&
-        p.o.includes(item.o)
-      );
-    }).map(item => ({
-      id: Number(item.id),
-      o: item.o,
-      q: item.q
-    }));
+function loadCart() {
+  try {
+    const stored = JSON.parse(localStorage.getItem('mp-cart') || '[]');
+    if (Array.isArray(stored)) {
+      cart = stored.filter(item => {
+        const p = P.find(product => product.id === Number(item?.id));
+        return p && Number.isInteger(item.q) && item.q > 0 &&
+          item.q <= 20 && p.o.includes(item.o);
+      }).map(item => ({ id: Number(item.id), o: item.o, q: item.q }));
+    }
+  } catch (e) {
+    cart = [];
   }
-} catch (e) {
-  cart = [];
 }
 
 const S = {
@@ -1379,13 +1081,18 @@ function checkout() {
    13. ORDER VALIDATION AND CONFIRMATION
 ========================================= */
 
+/* =========================================
+   13. ORDER VALIDATION AND CONFIRMATION
+========================================= */
+
 let last = null;
 
-function place(e) {
+async function place(e) {
   e.preventDefault();
 
   let ok = true;
 
+  // Customer validation rules
   const v = {
     name: x => x.length >= 2,
     email: x => /^\S+@\S+\.\S+$/.test(x),
@@ -1397,17 +1104,18 @@ function place(e) {
     zip: x => /^\d{4}$/.test(x)
   };
 
+  // Validation error messages
   const m = {
-    name: 'Enter your full name.',
-    email: 'Enter a valid email address.',
-    phone: 'Enter a valid mobile number, like 0917 555 0142.',
-    addr: 'Enter your street address.',
-    city: 'Enter your city.',
-    zip: 'Enter a 4-digit postal code.'
+    name: 'Please enter your full name.',
+    email: 'Please enter a valid email address.',
+    phone: 'Please enter a valid Philippine mobile number.',
+    addr: 'Please enter a complete street address.',
+    city: 'Please enter your city.',
+    zip: 'Postal code must contain 4 digits.'
   };
 
+  // Validate all customer fields FIRST
   for (const k in v) {
-
     const i = $(k);
     const good = v[k](i.value.trim());
 
@@ -1421,28 +1129,99 @@ function place(e) {
     }
   }
 
+  // Stop if customer information is invalid
   if (!ok) return;
 
-  last = {
-    no: 'MP-' + Math.floor(
-      100000 + Math.random() * 900000
-    ),
+  if (!cart.length) {
+    toast('Your cart is empty.');
+    return;
+  }
 
-    name: $('name').value.trim(),
+  const paymentInput = document.querySelector(
+    '[name=pay]:checked'
+  );
 
-    pay: document.querySelector(
-      '[name=pay]:checked'
-    ).value,
+  if (!paymentInput) {
+    toast('Please select a payment method.');
+    return;
+  }
 
-    total: sub() + ship()
+  // Prepare checkout information
+  const payload = {
+    customer: {
+      name: $('name').value.trim(),
+      email: $('email').value.trim(),
+      phone: $('phone').value.trim(),
+      addr: $('addr').value.trim(),
+      city: $('city').value.trim(),
+      zip: $('zip').value.trim()
+    },
+
+    payment: paymentInput.value,
+
+    items: cart.map(l => ({
+      id: Number(l.id),
+      o: l.o,
+      q: l.q
+    }))
   };
 
-  cart = [];
+  const submitBtn = e.submitter ||
+    $('cf').querySelector('[type="submit"]');
 
-  save();
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+  }
 
-  location.hash = 'confirmed';
+  try {
+    // Send order to PHP backend
+    const r = await fetch('api/place-order.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await r.json();
+
+    // Do not show confirmation if PHP fails
+    if (!r.ok) {
+      throw new Error(data.error || 'Order failed.');
+    }
+
+    if (!data.no || data.total === undefined) {
+      throw new Error('Invalid server response.');
+    }
+
+    // Save actual server response
+    last = {
+      no: data.no,
+      name: payload.customer.name,
+      pay: payload.payment,
+      total: Number(data.total)
+    };
+
+    // Clear cart only after successful database insertion
+    cart = [];
+    save();
+
+    // Display confirmation
+    location.hash = 'confirmed';
+
+  } catch (err) {
+    console.error('Checkout error:', err);
+    toast(err.message || 'Unable to place your order.');
+
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Place order';
+    }
+  }
 }
+
 
 function confirmed() {
   if (!last) {
@@ -1471,7 +1250,7 @@ function confirmed() {
                 </h1>
 
                 <p class="mt">
-                    Your order <b>${last.no}</b> has been recorded for this demo.
+                    Your order <b>${last.no}</b> has been recorded.
                     No actual payment or delivery has been arranged.
                 </p>
 
@@ -1785,6 +1564,15 @@ function route() {
 
 window.addEventListener('hashchange', route);
 
-save();
-
-route();
+fetch('api/products.php')
+  .then(r => r.json())
+  .then(data => {
+    P = data;
+    loadCart();
+    save();
+    route();
+  })
+  .catch(() => {
+    $('app').innerHTML =
+      '<div class="wrap center" style="padding:80px 22px"><h1>Could not load products</h1></div>';
+  });
