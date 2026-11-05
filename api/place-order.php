@@ -1,4 +1,3 @@
-
 <?php
 require 'database.php';
 header('Content-Type: application/json');

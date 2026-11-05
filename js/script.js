@@ -1460,33 +1460,69 @@ function contact() {
     `;
 }
 
-function send(e) {
+async function send(e) {
   e.preventDefault();
 
   let valid = true;
 
-  [
+  const fields = [
     ['kn', x => x.length > 1, 'Enter your name.'],
     ['ke', x => /^\S+@\S+\.\S+$/.test(x), 'Enter a valid email address.'],
     ['km', x => x.length >= 10, 'Write at least 10 characters.']
-  ].forEach(([k, f, m]) => {
+  ];
 
+  // Validate form fields
+  fields.forEach(([k, f, m]) => {
     const i = $(k);
     const good = f(i.value.trim());
 
     i.classList.toggle('bad', !good);
-
     $('e-' + k).textContent = good ? '' : m;
 
     if (!good) valid = false;
-
   });
 
-  if (valid) {
-    $('ok').textContent =
-      'Your message has been validated. Please contact us through our listed contact details.';
+  if (!valid) return;
 
-    e.target.reset();
+  const payload = {
+    name: $('kn').value.trim(),
+    email: $('ke').value.trim(),
+    message: $('km').value.trim()
+  };
+
+  const form = $('kf');
+  const btn = form.querySelector('[type="submit"]');
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  $('ok').textContent = '';
+
+  try {
+    const response = await fetch('api/contact.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Unable to send your message.');
+    }
+
+    $('ok').textContent = data.message;
+    form.reset();
+
+  } catch (error) {
+    console.error('Contact form error:', error);
+    $('ok').textContent = error.message;
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send message';
   }
 }
 
