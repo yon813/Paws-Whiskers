@@ -95,17 +95,6 @@
     if (e.key === 'Escape') closeDrawer();
   });
 
-  /* Open the drawer after a successful "Add to cart" */
-  const count = () => cart.reduce((a, l) => a + l.q, 0);
-  const origAdd = window.add;
-  window.add = function () {
-    const before = count();
-    origAdd.apply(this, arguments);
-    if (count() > before && !['#cart', '#checkout'].includes(location.hash)) {
-      openDrawer();
-    }
-  };
-
   window.renderDrawer = renderDrawer;
   window.openDrawer = openDrawer;
   window.closeDrawer = closeDrawer;
