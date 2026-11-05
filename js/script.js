@@ -1,10 +1,5 @@
 
 /* =========================================
-   MAISON PAWS - JAVASCRIPT
-   Pet Boutique for Dogs & Cats
-========================================= */
-
-/* =========================================
    1. GENERAL SETTINGS
 ========================================= */
 
@@ -303,6 +298,7 @@ const P = [
   }
 ];
 
+
 /* =========================================
    2. CATEGORIES AND SORTING
 ========================================= */
@@ -329,17 +325,25 @@ const SORTS = [
 let cart = [];
 
 try {
-  cart = JSON.parse(localStorage.getItem('mp-cart') || '[]');
+  const stored = JSON.parse(localStorage.getItem('mp-cart') || '[]');
 
-  if (!Array.isArray(cart)) {
-    cart = [];
+  if (Array.isArray(stored)) {
+    cart = stored.filter(item => {
+      const p = P.find(product => product.id === Number(item?.id));
+
+      return (
+        p &&
+        Number.isInteger(item.q) &&
+        item.q > 0 &&
+        item.q <= 20 &&
+        p.o.includes(item.o)
+      );
+    }).map(item => ({
+      id: Number(item.id),
+      o: item.o,
+      q: item.q
+    }));
   }
-
-  cart = cart.filter(item =>
-    prodExists(item.id) &&
-    Number.isInteger(item.q) &&
-    item.q > 0
-  );
 } catch (e) {
   cart = [];
 }
@@ -349,6 +353,7 @@ const S = {
   cat: 0,
   sort: 'best'
 };
+
 
 /* =========================================
    3. PRODUCT HELPERS
@@ -363,8 +368,17 @@ function prod(id) {
 }
 
 function stars(r) {
-  return '★ ' + r.toFixed(1);
+  const count = Math.round(r);
+
+  return `
+        ${Array.from({ length: 5 }, (_, i) => `
+            <i class="${i < count ? 'ri-star-fill' : 'ri-star-line'}"
+               aria-hidden="true"></i>
+        `).join('')}
+        <span>${r.toFixed(1)}</span>
+    `;
 }
+
 
 /* =========================================
    4. PRODUCT ILLUSTRATIONS
@@ -416,11 +430,11 @@ function art(p, v = 0) {
             />
 
             <g fill="#F5E9E2"
-                fill-opacity=".7"
-                stroke="#773344"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round">
+               fill-opacity=".7"
+               stroke="#773344"
+               stroke-width="3"
+               stroke-linecap="round"
+               stroke-linejoin="round">
 
                 ${IC[g]}
 
@@ -428,6 +442,7 @@ function art(p, v = 0) {
         </svg>
     `;
 }
+
 
 /* =========================================
    5. PRODUCT CARDS
@@ -472,6 +487,7 @@ function card(p) {
     `;
 }
 
+
 /* =========================================
    6. SHOPPING CART
 ========================================= */
@@ -486,6 +502,13 @@ function save() {
   $('cnt').textContent = cart.reduce(
     (a, l) => a + l.q, 0
   );
+
+  if (
+    typeof window.renderDrawer === 'function' &&
+    $('drawer')?.classList.contains('on')
+  ) {
+    window.renderDrawer();
+  }
 }
 
 function toast(t) {
@@ -508,9 +531,26 @@ function add(id, q = 1, o) {
 
   o = o || p.o[0];
 
+  q = Number(q);
+
+  if (!Number.isInteger(q) || q < 1 || q > 20) {
+    toast('Please select a valid quantity');
+    return;
+  }
+
+  if (!p.o.includes(o)) {
+    toast('Please select a valid option');
+    return;
+  }
+
   const l = cart.find(x => x.id == id && x.o == o);
 
   if (l) {
+    if (l.q + q > 20) {
+      toast('Maximum quantity is 20');
+      return;
+    }
+
     l.q += q;
   } else {
     cart.push({
@@ -533,6 +573,11 @@ function chg(i, d) {
 
   cart[i].q += d;
 
+  if (cart[i].q > 20) {
+    cart[i].q = 20;
+    toast('Maximum quantity is 20');
+  }
+
   if (cart[i].q < 1) {
     cart.splice(i, 1);
   }
@@ -542,6 +587,8 @@ function chg(i, d) {
 }
 
 function rm(i) {
+  if (!cart[i]) return;
+
   cart.splice(i, 1);
 
   save();
@@ -555,6 +602,7 @@ const sub = () => cart.reduce(
 const ship = () => sub() >= 3000 || !cart.length
   ? 0
   : 150;
+
 
 /* =========================================
    7. SEARCH
@@ -582,6 +630,7 @@ function doSearch() {
     location.hash = 'shop';
   }
 }
+
 
 /* =========================================
    8. HOME PAGE
@@ -655,7 +704,7 @@ function home() {
                     <h1>Everything they love, all in one place.</h1>
 
                     <p class="mt">
-                        Maison Paws is a small boutique of beautiful,
+                        Paws&Whiskers is a small boutique of beautiful,
                         well-made essentials for dogs and cats.
                         Every beanbag, brush and bowl is chosen by us,
                         tested at home and made to last.
@@ -748,7 +797,7 @@ function home() {
                     <h2>A quieter kind of pet store</h2>
 
                     <p class="mt">
-                        We started Maison Paws because the things
+                        We started Paws&Whiskers because the things
                         our pets use every day should be as considered
                         as the rest of our homes. We stock fewer products,
                         chosen for materials, craft and comfort.
@@ -787,7 +836,13 @@ function home() {
                         <div class="quote glass">
                             <p>“${t[0]}”</p>
                             <b>${t[1]}</b>
-                            <div class="rt">★★★★★</div>
+                            <div class="rt">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                            </div>
                         </div>
                     `).join('')}
 
@@ -796,6 +851,7 @@ function home() {
         </section>
     `;
 }
+
 
 /* =========================================
    9. SHOP PAGE
@@ -851,21 +907,28 @@ function shop() {
 
 function grid() {
   const l = P.filter(p => {
-
     const c = CATS[S.cat];
 
-    return (
-      (
-        S.cat == 0 ||
-        (c == 'Dog Essentials' && p.pet != 'cat') ||
-        (c == 'Cat Essentials' && p.pet != 'dog') ||
-        p.g == c
-      ) &&
-      (p.n + p.g + p.d)
-        .toLowerCase()
-        .includes(S.q.toLowerCase())
+    const matchesCategory =
+      S.cat == 0 ||
+      (c == 'Dog Essentials' && p.pet != 'cat') ||
+      (c == 'Cat Essentials' && p.pet != 'dog') ||
+      p.g == c;
+
+    const searchText = (
+      p.n + ' ' +
+      p.g + ' ' +
+      p.d + ' ' +
+      p.pet + ' ' +
+      p.o.join(' ') + ' ' +
+      p.ol
+    ).toLowerCase();
+
+    const matchesSearch = searchText.includes(
+      S.q.toLowerCase()
     );
 
+    return matchesCategory && matchesSearch;
   });
 
   const f = {
@@ -890,6 +953,7 @@ function grid() {
             </div>
         `;
 }
+
 
 /* =========================================
    10. PRODUCT DETAILS
@@ -917,7 +981,9 @@ function product(id) {
         <div class="wrap">
 
             <p class="mt">
-                <a href="#shop">← Back to shop</a>
+                <a href="#shop">
+                    <i class="ri-arrow-left-line"></i> Back to shop
+                </a>
             </p>
 
             <div class="pd">
@@ -1052,6 +1118,7 @@ function pq(d) {
 
   $('pq').textContent = sel.q;
 }
+
 
 /* =========================================
    11. CART PAGE
@@ -1188,6 +1255,7 @@ function summ() {
     `;
 }
 
+
 /* =========================================
    12. CHECKOUT PAGE
 ========================================= */
@@ -1263,9 +1331,8 @@ function checkout() {
                             <p id="gc"
                                 style="display:none;margin-top:10px">
 
-                                Send payment to GCash 0917 555 0142
-                                (Maison Paws) and use your order number
-                                as the reference. We confirm once received.
+                                GCash payment is a demonstration only.
+                                No actual payment will be processed.
 
                             </p>
 
@@ -1306,6 +1373,7 @@ function checkout() {
         </div>
     `;
 }
+
 
 /* =========================================
    13. ORDER VALIDATION AND CONFIRMATION
@@ -1403,8 +1471,8 @@ function confirmed() {
                 </h1>
 
                 <p class="mt">
-                    Your order <b>${last.no}</b> is confirmed.
-                    We will message you when it ships.
+                    Your order <b>${last.no}</b> has been recorded for this demo.
+                    No actual payment or delivery has been arranged.
                 </p>
 
                 <div class="row"
@@ -1430,6 +1498,7 @@ function confirmed() {
     `;
 }
 
+
 /* =========================================
    14. ABOUT PAGE
 ========================================= */
@@ -1445,7 +1514,7 @@ function about() {
                     <h1>Fewer things, chosen well.</h1>
 
                     <p class="mt">
-                        Maison Paws exists to give dogs and cats
+                        Paws&Whiskers exists to give dogs and cats
                         carefully selected, high-quality products.
                         We look for natural materials, honest ingredients
                         and good craft, and we test every item with
@@ -1504,6 +1573,7 @@ function about() {
     `;
 }
 
+
 /* =========================================
    15. CONTACT PAGE
 ========================================= */
@@ -1557,7 +1627,7 @@ function contact() {
                     <h3>Contact</h3>
 
                     <p class="mt">
-                        hello@maisonpaws.ph<br>
+                        hello@pawsandwhiskers.ph<br>
                         +63 917 555 0142<br>
                         Davao City, Philippines<br>
                         Mon–Sat, 9 am–6 pm
@@ -1565,7 +1635,7 @@ function contact() {
 
                     <p>
                         Instagram · Facebook · TikTok<br>
-                        @maisonpaws
+                        @pawsandwhiskers
                     </p>
 
                 </aside>
@@ -1585,7 +1655,7 @@ function contact() {
     ],
     [
       'How do I pay with GCash?',
-      'Choose GCash at checkout, send payment to the number shown and use your order number as the reference.'
+      'GCash is displayed as a demonstration payment option. No actual payment is processed.'
     ],
     [
       'Can I return an item?',
@@ -1614,7 +1684,7 @@ function contact() {
 function send(e) {
   e.preventDefault();
 
-  let ok = true;
+  let valid = true;
 
   [
     ['kn', x => x.length > 1, 'Enter your name.'],
@@ -1623,23 +1693,24 @@ function send(e) {
   ].forEach(([k, f, m]) => {
 
     const i = $(k);
-    const g = f(i.value.trim());
+    const good = f(i.value.trim());
 
-    i.classList.toggle('bad', !g);
+    i.classList.toggle('bad', !good);
 
-    $('e-' + k).textContent = g ? '' : m;
+    $('e-' + k).textContent = good ? '' : m;
 
-    if (!g) ok = false;
+    if (!good) valid = false;
 
   });
 
-  if (ok) {
+  if (valid) {
     $('ok').textContent =
-      'Message sent. We reply within one working day.';
+      'Your message has been validated. Please contact us through our listed contact details.';
 
     e.target.reset();
   }
 }
+
 
 /* =========================================
    16. PAGE ROUTER
@@ -1702,10 +1773,11 @@ function route() {
   window.scrollTo(0, 0);
 
   document.title =
-    'Maison Paws — ' +
+    'Paws&Whiskers — ' +
     k.charAt(0).toUpperCase() +
     k.slice(1);
 }
+
 
 /* =========================================
    17. INITIALIZE WEBSITE
