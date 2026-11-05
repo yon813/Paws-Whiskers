@@ -7,6 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -25,23 +26,17 @@
   </div>
 
   <button class="ib" aria-label="Search" onclick="toggleSearch()">
-    <svg viewBox="0 0 24 24">
-      <circle cx="11" cy="11" r="7"/>
-      <path d="M20 20l-4-4"/>
-    </svg>
+    <i class="ri-search-line"></i>
   </button>
 
-  <a class="ib" href="#cart" aria-label="Shopping bag">
-    <svg viewBox="0 0 24 24">
-      <path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 016 0v2"/>
-    </svg>
+  <button class="ib" id="cartBtn" aria-label="Open shopping bag" aria-controls="drawer">
+    <i class="ri-shopping-bag-3-line"></i>
     <span class="badge" id="cnt">0</span>
-  </a>
+  </button>
 
-  <button class="ib" id="burger" aria-label="Menu" onclick="document.getElementById('links').classList.toggle('open')">
-    <svg viewBox="0 0 24 24">
-      <path d="M4 7h16M4 12h16M4 17h16"/>
-    </svg>
+  <button class="ib" id="burger" aria-label="Menu"
+          onclick="document.getElementById('links').classList.toggle('open')">
+    <i class="ri-menu-line"></i>
   </button>
 </nav>
 
@@ -65,24 +60,9 @@
         </p>
 
         <div class="soc">
-          <a href="#contact" aria-label="Instagram">
-            <svg viewBox="0 0 24 24">
-              <rect x="4" y="4" width="16" height="16" rx="5"/>
-              <circle cx="12" cy="12" r="3.5"/>
-            </svg>
-          </a>
-
-          <a href="#contact" aria-label="Facebook">
-            <svg viewBox="0 0 24 24">
-              <path d="M14 8h3V4h-3a4 4 0 00-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/>
-            </svg>
-          </a>
-
-          <a href="#contact" aria-label="TikTok">
-            <svg viewBox="0 0 24 24">
-              <path d="M14 4v11a3.5 3.5 0 11-3.5-3.5M14 4c0 2.5 2 4.5 5 4.5"/>
-            </svg>
-          </a>
+          <a href="#contact" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+          <a href="#contact" aria-label="Facebook"><i class="ri-facebook-circle-line"></i></a>
+          <a href="#contact" aria-label="TikTok"><i class="ri-tiktok-line"></i></a>
         </div>
       </div>
 
@@ -117,8 +97,34 @@
   </div>
 </footer>
 
+<!-- Cart drawer -->
+<div id="scrim" class="scrim"></div>
+
+<aside id="drawer" class="drawer glass" role="dialog" aria-modal="true"
+       aria-labelledby="drawerTitle" aria-hidden="true">
+  <div class="drawer-h">
+    <h3 id="drawerTitle">Your bag</h3>
+    <button class="ib" id="drawerClose" aria-label="Close bag">
+      <i class="ri-close-line"></i>
+    </button>
+  </div>
+
+  <div class="drawer-b" id="drawerBody">
+    <!-- cart items render here -->
+  </div>
+
+  <div class="drawer-f">
+    <div class="row tot"><span>Subtotal</span><span id="drawerTotal">₱0</span></div>
+    <div class="btns">
+      <a class="btn ghost" href="#cart" id="viewBag">View full bag</a>
+      <a class="btn" href="#cart" id="checkoutBtn">Checkout</a>
+    </div>
+  </div>
+</aside>
+
 <div id="toast" role="status"></div>
 
 <script src="script.js"></script>
+<script src="drawer.js"></script>
 </body>
 </html>
