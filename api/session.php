@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -10,7 +9,8 @@ if (isset($_SESSION['user_id'])) {
     'user' => [
       'id' => $_SESSION['user_id'],
       'name' => $_SESSION['user_name'],
-      'email' => $_SESSION['user_email']
+      'email' => $_SESSION['user_email'],
+      'role' => $_SESSION['user_role'] ?? 'customer'
     ]
   ]);
 } else {

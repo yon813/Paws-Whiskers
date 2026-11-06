@@ -1,4 +1,3 @@
-
 const accountOverlay = document.getElementById('accountOverlay');
 const accountBtn = document.getElementById('accountBtn');
 
@@ -72,6 +71,9 @@ function showProfile() {
   profileName.textContent = currentUser.name;
   profileEmail.textContent = currentUser.email;
 
+  const adminLink = document.getElementById('adminLink');
+  if (adminLink) adminLink.hidden = currentUser.role !== 'admin';
+
   accountMessage.textContent = '';
 }
 
@@ -106,10 +108,12 @@ document.addEventListener('keydown', (e) => {
 });
 
 // MY ORDERS BUTTON
-myOrdersBtn.addEventListener('click', () => {
-  closeAccount();
-  location.hash = 'my-orders';
-});
+if (myOrdersBtn) {
+  myOrdersBtn.addEventListener('click', () => {
+    closeAccount();
+    location.hash = 'my-orders';
+  });
+}
 
 
 // SIGN UP
@@ -184,6 +188,12 @@ loginForm.addEventListener('submit', async (e) => {
 
     currentUser = result.user;
     loginForm.reset();
+
+    // Admin accounts go straight to the dashboard
+    if (currentUser.role === 'admin') {
+      window.location.href = 'admin.php';
+      return;
+    }
 
     showProfile();
 

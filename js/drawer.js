@@ -30,7 +30,10 @@
       const p = prod(l.id);
       return `
         <div class="dline">
-          ${art(p)}
+          <a class="dthumb" href="#product-${p.id}" aria-label="${p.n}"
+             style="display:block;width:100%;max-width:75px;aspect-ratio:1/1;border-radius:12px;overflow:hidden;">
+            ${art(p).replace('<img', '<img style="display:block;width:100%;height:100%;object-fit:cover;"')}
+          </a>
           <div class="dinfo">
             <a href="#product-${p.id}"><b>${p.n}</b></a>
             <small>${p.ol}: ${l.o}</small>

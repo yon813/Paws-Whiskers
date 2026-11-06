@@ -1157,12 +1157,37 @@ async function place(e) {
     }
 
     // Save actual server response
+    const rItems = cart.map(l => {
+      const p = prod(l.id);
+      return {
+        n: p ? p.n : 'Product #' + l.id,
+        ol: p ? p.ol : 'Option',
+        o: l.o,
+        q: l.q,
+        price: p ? p.p : 0
+      };
+    });
+    const rSub = rItems.reduce((a, i) => a + i.price * i.q, 0);
+
     last = {
       no: data.no,
       name: payload.customer.name,
+      email: payload.customer.email,
+      phone: payload.customer.phone,
+      addr: payload.customer.addr,
+      city: payload.customer.city,
+      zip: payload.customer.zip,
       pay: payload.payment,
-      total: Number(data.total)
+      items: rItems,
+      subtotal: rSub,
+      shipping: Math.max(0, Number(data.total) - rSub),
+      total: Number(data.total),
+      date: new Date().toISOString()
     };
+
+    try {
+      sessionStorage.setItem('mp-last-order', JSON.stringify(last));
+    } catch (e) { /* receipt still shows from memory */ }
 
     // Clear cart only after successful database insertion
     cart = [];
@@ -1185,6 +1210,14 @@ async function place(e) {
 
 function confirmed() {
   if (!last) {
+    try {
+      last = JSON.parse(sessionStorage.getItem('mp-last-order') || 'null');
+    } catch (e) {
+      last = null;
+    }
+  }
+
+  if (!last) {
     return `
       <div class="wrap center"
           style="padding:80px 22px">
@@ -1199,38 +1232,84 @@ function confirmed() {
     `;
   }
 
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
+  const when = new Date(last.date || Date.now()).toLocaleString('en-PH', {
+    dateStyle: 'medium',
+    timeStyle: 'short'
+  });
+
+  const rows = (last.items || []).map(i => `
+    <tr>
+      <td>
+        <b>${esc(i.n)}</b><br>
+        <small>${esc(i.ol)}: ${esc(i.o)}</small>
+      </td>
+      <td class="r-c">${i.q}</td>
+      <td class="r-r">${fmt(i.price)}</td>
+      <td class="r-r">${fmt(i.price * i.q)}</td>
+    </tr>
+  `).join('');
+
   return `
-    <div class="wrap"
-        style="max-width:640px;padding:70px 22px">
+    <div class="wrap" style="max-width:680px;padding:60px 22px">
 
-      <div class="glass center" style="padding:44px">
-
-        <h1>
-          Thank you, ${last.name.split(' ')[0].replace(/[<>&]/g, '')}
-        </h1>
-
+      <div class="center no-print" style="margin-bottom:22px">
+        <h1>Thank you, ${esc(last.name.split(' ')[0])}!</h1>
         <p class="mt">
-          Your order <b>${last.no}</b> has been recorded.
+          Your order <b>${esc(last.no)}</b> has been recorded.
           No actual payment or delivery has been arranged.
         </p>
+      </div>
 
-        <div class="row"
-            style="justify-content:center;gap:30px">
+      <div class="glass receipt" id="receipt">
 
-          <span>
-            Total: <b>${fmt(last.total)}</b>
-          </span>
-
-          <span>
-            Payment: <b>${last.pay}</b>
-          </span>
-
+        <div class="r-head">
+          <h2>Paws&amp;Whiskers</h2>
+          <p>Official Receipt</p>
         </div>
 
-        <a class="btn mt" href="#home">
-          Back to home
-        </a>
+        <div class="r-meta">
+          <div><small>Order no.</small><b>${esc(last.no)}</b></div>
+          <div><small>Date</small><b>${esc(when)}</b></div>
+          <div><small>Payment</small><b>${esc(last.pay)}</b></div>
+        </div>
 
+        <div class="r-cust">
+          <small>Billed / shipped to</small>
+          <b>${esc(last.name)}</b><br>
+          ${esc(last.addr)}, ${esc(last.city)} ${esc(last.zip)}<br>
+          ${esc(last.email)} · ${esc(last.phone)}
+        </div>
+
+        <table class="r-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th class="r-c">Qty</th>
+              <th class="r-r">Price</th>
+              <th class="r-r">Amount</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+
+        <div class="r-totals">
+          <div><span>Subtotal</span><span>${fmt(last.subtotal || 0)}</span></div>
+          <div><span>Shipping</span><span>${last.shipping ? fmt(last.shipping) : 'Free'}</span></div>
+          <div class="r-grand"><span>Total</span><span>${fmt(last.total)}</span></div>
+        </div>
+
+        <p class="r-foot">Thank you for shopping with us. Keep this receipt for your records.</p>
+      </div>
+
+      <div class="center no-print" style="margin-top:24px">
+        <button class="btn" type="button" onclick="window.print()">
+          <i class="ri-printer-line"></i> Print / Save as PDF
+        </button>
+        <a class="btn ghost" href="#home">Back to home</a>
       </div>
 
     </div>

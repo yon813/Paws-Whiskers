@@ -9,8 +9,61 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/auth.css?v=2">
+  <style id="fixes">
+    /* Mobile menu: solid dropdown */
+    @media (max-width: 860px) {
+      #nav .links {
+        background: #fbf3ee !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: 0 16px 40px rgba(119,51,68,.22);
+        z-index: 30;
+        gap: 0;
+        padding: 10px 22px;
+      }
+      #nav .links a { padding: 13px 0; border-bottom: 1px solid rgba(119,51,68,.12); }
+      #nav .links a:last-child { border-bottom: 0; }
+    }
+    @media (max-width: 480px) {
+      nav { gap: 6px; padding: 8px 14px; }
+      .logo { font-size: 1.3rem; }
+      .ib { padding: 5px; }
+    }
+
+    /* Cart drawer images */
+    .dline img { width: 75px; height: 75px; object-fit: cover; border-radius: 12px; display: block; }
+    .dinfo { min-width: 0; }
+
+    /* Receipt */
+    .receipt { padding: 34px; background: #fffaf7; }
+    .r-head { text-align: center; border-bottom: 2px dashed rgba(119,51,68,.3); padding-bottom: 16px; margin-bottom: 18px; }
+    .r-head p { margin: 4px 0 0; letter-spacing: .15em; text-transform: uppercase; font-size: 12px; opacity: .7; }
+    .r-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+    .r-meta small, .r-cust small { display: block; opacity: .65; font-size: 12px; }
+    .r-cust { margin-bottom: 18px; line-height: 1.6; }
+    .r-table { width: 100%; border-collapse: collapse; }
+    .r-table th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; opacity: .7; padding: 8px 0; border-bottom: 1px solid rgba(119,51,68,.3); }
+    .r-table td { padding: 10px 0; border-bottom: 1px solid rgba(119,51,68,.12); vertical-align: top; }
+    .r-table small { opacity: .7; }
+    .r-c { text-align: center; }
+    .r-r { text-align: right; white-space: nowrap; }
+    .r-totals { margin-top: 14px; }
+    .r-totals > div { display: flex; justify-content: space-between; padding: 5px 0; }
+    .r-grand { font-size: 1.25rem; font-weight: 700; border-top: 2px dashed rgba(119,51,68,.3); margin-top: 6px; padding-top: 10px !important; }
+    .r-foot { text-align: center; font-size: 13px; opacity: .7; margin: 22px 0 0; }
+    @media (max-width: 520px) {
+      .receipt { padding: 20px; }
+      .r-meta { grid-template-columns: 1fr; gap: 8px; }
+    }
+    @media print {
+      body { background: #fff !important; }
+      nav, footer, #sbar, #scrim, #drawer, #toast, .no-print, body::before { display: none !important; }
+      .wrap { max-width: 100% !important; padding: 0 !important; }
+      .receipt { box-shadow: none; border: 0; background: #fff; backdrop-filter: none; }
+    }
+  </style>
 </head>
 <body>
 
@@ -40,8 +93,7 @@
     <span class="badge" id="cnt">0</span>
   </button>
 
-  <button class="ib" id="burger" aria-label="Menu"
-          onclick="document.getElementById('links').classList.toggle('open')">
+  <button class="ib" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="links" type="button">
     <i class="ri-menu-line"></i>
   </button>
 </nav>
@@ -119,6 +171,24 @@
       </p>
     </form>
 
+    <!-- LOGGED-IN PROFILE -->
+    <div id="accountProfile" hidden>
+      <div class="account-details">
+        <div class="account-avatar"><i class="ri-user-line"></i></div>
+        <div>
+          <strong id="profileName"></strong>
+          <small id="profileEmail"></small>
+        </div>
+      </div>
+      <a class="account-submit" id="adminLink" href="admin.php" hidden
+         style="text-decoration:none;justify-content:center">
+        Admin dashboard <i class="ri-arrow-right-line"></i>
+      </a>
+      <button type="button" class="account-submit" id="myOrdersBtn">My orders</button>
+      <button type="button" class="account-submit" id="logoutBtn"
+              style="background:transparent;color:var(--plum)">Log out</button>
+    </div>
+
     <p id="accountMessage" role="status"></p>
 
   </div>
@@ -144,9 +214,9 @@
         </p>
 
         <div class="soc">
-          <a href="#contact" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
-          <a href="#contact" aria-label="Facebook"><i class="ri-facebook-circle-line"></i></a>
-          <a href="#contact" aria-label="TikTok"><i class="ri-tiktok-line"></i></a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="ri-facebook-circle-line"></i></a>
+          <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="ri-tiktok-line"></i></a>
         </div>
       </div>
 
@@ -209,7 +279,36 @@
 <div id="toast" role="status"></div>
 
 <script src="js/script.js"></script>
-<script src="js/drawer.js"></script>
+<script src="js/drawer.js?v=2"></script>
 <script src="js/auth-modal.js"></script>
+<script>
+  (function () {
+    var burger = document.getElementById('burger');
+    var links  = document.getElementById('links');
+    if (!burger || !links) return;
+    var icon = burger.querySelector('i');
+    function setMenu(open) {
+      links.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (icon) icon.className = open ? 'ri-close-line' : 'ri-menu-line';
+    }
+    burger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setMenu(!links.classList.contains('open'));
+    });
+    links.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setMenu(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#nav')) setMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setMenu(false);
+    });
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 860) setMenu(false);
+    });
+  })();
+</script>
 </body>
 </html>
