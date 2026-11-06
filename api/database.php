@@ -4,7 +4,7 @@
 $host = 'localhost';
 $dbname = 'pawsandwhiskers';
 $username = 'root';
-$password = '';
+$password = 'pumbamaster';
 
 try {
     $pdo = new PDO(
